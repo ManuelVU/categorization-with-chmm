@@ -6,10 +6,10 @@ used by files in the `app` directory.
 
 ----
 
-- Need a function that can pull data from condition type 4 on Lee and Navarro
-(2002) and from condition type 6 in Lewandovsky (2011) and save them with 
-the same format as a `.csv` file, this format has to be common so that the 
-functions used for sampling don't have to change depending on the experiment.
+- Need a function that can pull from condition type 6 in Lewandovsky (2011) and 
+save them with the same format as a `.csv` file, this format has to be common so 
+that the functions used for sampling don't have to change depending on the 
+experiment.
 
 - I need a function that can take the properties of the stimulus in each 
 experiment and generate a similarity matrix. I think this will be
