@@ -1,5 +1,6 @@
-# This function reads and writes data from one or more of the conditions
-# In Lee and Navarro (2002) and saves them in long-format. 
+# Function that reads and writes data from one or more of the conditions in
+# Lee and Navarro (2002) file is whiten in long-format as a .csv into the 
+# ~/data/csv-files directory. 
 lee_navarro_rw <- function(file_suffix,
                            conditions_keep = c(1:4), 
                            participants_keep = c(1:22)){

@@ -43,6 +43,10 @@ used by files in `~/analysis`.
 
 - Missing files for all and type 6 from lewandowsky.
 
+- Need to write a function that creates a data file in long format that contains
+the condition x stimulus x category lebel from the lewandowsky 2011 experiment 
+as some of the information is missing from the original file.
+
 - Similarity metrics could also be stored as data but not sure they should be 
 with the rest of the files. I could add a different directory and save into it
 using another function.
