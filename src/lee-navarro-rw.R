@@ -1,6 +1,6 @@
 # This function reads and writes data from one or more of the conditions
 # In Lee and Navarro (2002) and saves them in long-format. 
-lee_navarro_rw <- function(file_suffix = "",
+lee_navarro_rw <- function(file_suffix,
                            conditions_keep = c(1:4), 
                            participants_keep = c(1:22)){
   
@@ -69,12 +69,16 @@ lee_navarro_rw <- function(file_suffix = "",
                                       yes = TRUE, no = FALSE))
   }
   
-  out_tmp <- dplyr::data_frame(id, trial, condition, trial_condition,
-                               stimulus, stimulus_char, response, response_char, 
-                               category, category_char, correct)
+  out_tmp <- dplyr::tibble(id, trial, condition, trial_condition,
+                           stimulus, stimulus_char, response, response_char, 
+                           category, category_char, correct)
   if(length(conditions_keep) < 4){
     out_tmp <- subset(x = out_tmp, 
                       subset = out_tmp$condition %in% conditions_keep)
+  }
+  
+  if(missing(file_suffix)){
+    file_suffix <- "all"
   }
   
   readr::write_csv(x = out_tmp, 
