@@ -34,18 +34,20 @@ used by files in `~/analysis`.
   1. `lee-navarro-2002-all.csv` data from all conditions and participants in Lee 
   and Navarro (2002) stored in long format.
   
-  2. `lee-navarro-2002-type4.csv` data from condition (type) 4 from Lee and Navarro
-  (2002) stored in long format.
+  2. `lee-navarro-2002-type4.csv` data from condition (type) 4 from Lee and 
+  Navarro (2002) stored in long format.
+  
+  5. `lewandowsky-categories.csv` condition (type) x stimulus x category 
+  associations in Lewandowsky (2011). This data is used in order to recreate 
+  trial-by-trial behavior in the experiment.
   
 ----
 
 ## Followig steps
 
-- Missing files for all and type 6 from lewandowsky.
-
-- Need to write a function that creates a data file in long format that contains
-the condition x stimulus x category lebel from the lewandowsky 2011 experiment 
-as some of the information is missing from the original file.
+- Missing files for all and type 6 from lewandowsky. Imputed data has to be 
+removed from the file, this will mean that not all participants have the same 
+number of trials by condition but that seems fine
 
 - Similarity metrics could also be stored as data but not sure they should be 
 with the rest of the files. I could add a different directory and save into it
