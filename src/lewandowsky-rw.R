@@ -106,6 +106,6 @@ lewandowsky_rw <- function(file_suffix,
   }
   
   readr::write_csv(x = out_tmp, 
-                   file = paste(c("data/csv-files/lee-navarro-2002-", 
+                   file = paste(c("data/csv-files/lewandowsky-2011-", 
                                   file_suffix, ".csv"), collapse = ""))
 }
