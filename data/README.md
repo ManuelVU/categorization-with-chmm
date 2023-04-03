@@ -38,10 +38,10 @@ used by files in `~/analysis`.
   Navarro (2002) stored in long format.
   
   3. `lewandowsky-2011-all.csv` data from all participants and conditions 
-  (types) in Lewandowsky (2011). Data is stored in long format. 
+  (types) in Lewandowsky (2011) stored in long format. 
   
   4. `lewandowsky-2011-type6.csv` data from all participants for condition 
-  (type) 6 category structures in Lewandowsky (2011). Data is stored in long 
+  (type) 6 category structures in Lewandowsky (2011) stored in long 
   format. 
   
 ----
