@@ -37,17 +37,16 @@ used by files in `~/analysis`.
   2. `lee-navarro-2002-type4.csv` data from condition (type) 4 from Lee and 
   Navarro (2002) stored in long format.
   
-  5. `lewandowsky-categories.csv` condition (type) x stimulus x category 
-  associations in Lewandowsky (2011). This data is used in order to recreate 
-  trial-by-trial behavior in the experiment.
+  3. `lewandowsky-2011-all.csv` data from all participants and conditions 
+  (types) in Lewandowsky (2011). Data is stored in long format. 
+  
+  4. `lewandowsky-2011-type6.csv` data from all participants for condition 
+  (type) 6 category structures in Lewandowsky (2011). Data is stored in long 
+  format. 
   
 ----
 
 ## Followig steps
-
-- Missing files for all and type 6 from lewandowsky. Imputed data has to be 
-removed from the file, this will mean that not all participants have the same 
-number of trials by condition but that seems fine
 
 - Similarity metrics could also be stored as data but not sure they should be 
 with the rest of the files. I could add a different directory and save into it
