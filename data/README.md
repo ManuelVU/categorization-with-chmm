@@ -1,16 +1,13 @@
 # Data organization and usage
 
-This directory contains the data used in this project in two formats, Matlab 
-(original format `.mat`) and a comma separated format (`.csv`) which is used by 
-the functions in `~/src`.
+Files in this directory include experimental data in their original format
+`.mat` and transformations to `.csv` used by the `.R` code in the `~/analysis` 
+directory. Functions used for data reading and writing can be found in the 
+`~/src` directory. 
 
 ----
-Files in this directory include the experimental data in their original format
-`.mat` and transformations to `.csv` used by the `.R` code in `~/analysis` 
-directory. Functions used for data reading and writing can be found in the 
-`~/source` directory. 
 
-- `matlab-files`: directory contains original data files in `.mat` format. These
+`~/matlab-files`: directory contains original data files in `.mat` format. These
 files are **only** used by functions that read and write data into other 
 formats.
 
@@ -28,8 +25,10 @@ formats.
   differences and modeling. *Journal of Experimental Psychology: Learning, 
   Memory and Cognition*. 37(3), 720-738.
   
-- `csv-files`: directory contains data files on `.csv` format, these files are 
-used by files in `~/analysis`.
+----
+
+`~/csv-files`: directory contains data files on `.csv` format, these files are 
+used by functions in the `~/analysis` directory.
 
   1. `lee-navarro-2002-all.csv` data from all conditions and participants in Lee 
   and Navarro (2002) stored in long format.
@@ -43,11 +42,3 @@ used by files in `~/analysis`.
   4. `lewandowsky-2011-type6.csv` data from all participants for condition 
   (type) 6 category structures in Lewandowsky (2011) stored in long 
   format. 
-  
-----
-
-## Followig steps
-
-- Similarity metrics could also be stored as data but not sure they should be 
-with the rest of the files. I could add a different directory and save into it
-using another function.
