@@ -1,0 +1,10 @@
+stimulus,stimulus_name,circle,triangle,square,red,green,blue
+1,circle-red,1,0,0,1,0,0
+2,circle-green,1,0,0,0,1,0
+3,circle-blue,1,0,0,0,0,1
+4,square-red,0,1,0,1,0,0
+5,square-green,0,1,0,0,1,0
+6,square-blue,0,1,0,0,0,1
+7,triangle-red,0,0,1,1,0,0
+8,triangle-green,0,0,1,0,1,0
+9,triangle-blue,0,0,1,0,0,1

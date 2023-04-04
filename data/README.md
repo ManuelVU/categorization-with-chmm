@@ -1,9 +1,9 @@
 # Data organization and usage
 
 Files in this directory include experimental data in their original format
-`.mat` and transformations to `.csv` used by the `.R` code in the `~/analysis` 
-directory. Functions used for data reading and writing can be found in the 
-`~/src` directory. 
+(`.mat`) and in `.csv`, alongside experimental-stimulus features
+used by functions in the `~/analysis` directory . Functions used for data 
+reading and writing can be found in the `~/src` directory. 
 
 ----
 
@@ -41,4 +41,18 @@ used by functions in the `~/analysis` directory.
   
   4. `lewandowsky-2011-type6.csv` data from all participants for condition 
   (type) 6 category structures in Lewandowsky (2011) stored in long 
-  format. 
+  format.
+  
+----
+
+`~/stimulus-features`: this directory contains stimulus feature matrices from 
+the experiments analyzed in the project in csv format.
+
+  1. `lee-navarro-features.csv` contains the features (in presence absence) of 
+  stimulus used in Lee and Navarro's 2002 experiment.
+  
+----
+
+TO DO
+
+- Need to add the stimulus features matrix for the Lewandowsky experiment
