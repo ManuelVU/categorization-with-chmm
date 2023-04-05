@@ -1,0 +1,9 @@
+stimulus,stimulus_name,gray,white,triangle,square,large,small
+1,gray-triangle-large,1,0,1,0,1,0
+2,gray-square-large,1,0,0,1,1,0
+3,gray-triangle-small,1,0,1,0,0,1
+4,gray-square-small,1,0,0,1,0,1
+5,white-triangle-large,0,1,1,0,1,0
+6,white-square-large,0,1,0,1,1,0
+7,white-triangle-small,0,1,1,0,0,1
+8,white-square-small,0,1,0,1,0,1

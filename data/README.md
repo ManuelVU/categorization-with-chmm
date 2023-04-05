@@ -48,11 +48,8 @@ used by functions in the `~/analysis` directory.
 `~/stimulus-features`: this directory contains stimulus feature matrices from 
 the experiments analyzed in the project in csv format.
 
-  1. `lee-navarro-features.csv` contains the features (in presence absence) of 
+  1. `lee-navarro-features.csv` features (presence/absence) of 
   stimulus used in Lee and Navarro's 2002 experiment.
   
-----
-
-TO DO
-
-- Need to add the stimulus features matrix for the Lewandowsky experiment
+  2. `lewandowsky-features.csv` features (presence/absence) of stimulus used in 
+  Lewandowsky's 2011 experiment.
