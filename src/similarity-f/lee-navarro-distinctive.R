@@ -12,11 +12,11 @@ distinctive_ln <- function(stimulus_features){
   n_features <- ncol(stimulus_features) - 2
   
   output <- list("in_i_not_in_j" = array(data = NA, 
-                                         dim = c(n_stimulus - 1,
+                                         dim = c(n_stimulus,
                                                  n_features, 
                                                  n_stimulus)),
                  "not_in_i_in_j" = array(data = NA, 
-                                         dim = c(n_stimulus - 1,
+                                         dim = c(n_stimulus,
                                                  n_features, 
                                                  n_stimulus)))
   for(i in 1:n_stimulus){
@@ -31,9 +31,11 @@ distinctive_ln <- function(stimulus_features){
     st_features_comp <- stimulus_features[-i, (3:ncol(stimulus_features))] |> 
       as.matrix()
     
-    output$in_i_not_in_j[,,i] <- st_features * (1 - st_features_comp)
+    output$in_i_not_in_j[i,,i] <- rep(x = 0, times = n_features)
+    output$in_i_not_in_j[-i,,i] <- st_features * (1 - st_features_comp)
     
-    output$not_in_i_in_j[,,i] <- (1 - st_features) * st_features_comp
+    output$not_in_i_in_j[i,,i] <- rep(x = 0, times = n_features)
+    output$not_in_i_in_j[-i,,i] <- (1 - st_features) * st_features_comp
     
   }
   return(output)
