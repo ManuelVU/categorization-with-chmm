@@ -23,19 +23,17 @@ distinctive_ln <- function(stimulus_features){
     
     st_features <- unlist(stimulus_features[i, (3:ncol(stimulus_features))]) |> 
       as.vector() |> 
-      rep(times = n_stimulus - 1) |> 
-      matrix(nrow = n_stimulus - 1, byrow = TRUE)
+      rep(times = n_stimulus) |> 
+      matrix(nrow = n_stimulus, byrow = TRUE)
     
-    st_index_comp <- stimulus_features[-i, 1]
+    st_index_comp <- stimulus_features[, 1]
     
-    st_features_comp <- stimulus_features[-i, (3:ncol(stimulus_features))] |> 
+    st_features_comp <- stimulus_features[, (3:ncol(stimulus_features))] |> 
       as.matrix()
     
-    output$in_i_not_in_j[i,,i] <- rep(x = 0, times = n_features)
-    output$in_i_not_in_j[-i,,i] <- st_features * (1 - st_features_comp)
+    output$in_i_not_in_j[,,i] <- st_features * (1 - st_features_comp)
     
-    output$not_in_i_in_j[i,,i] <- rep(x = 0, times = n_features)
-    output$not_in_i_in_j[-i,,i] <- (1 - st_features) * st_features_comp
+    output$not_in_i_in_j[,,i] <- (1 - st_features) * st_features_comp
     
   }
   return(output)
