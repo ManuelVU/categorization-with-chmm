@@ -1,11 +1,16 @@
 # Function that takes a distinctive similarity array and returns a dissimilarity 
 # measure for each stimulus in the array. Dissimilarity measure is based on 
-# Lee and Navarro 2002 equation 12
+# Lee and Navarro 2002 equation 12.
 featural_distance <- function(saliency, distinctive_features){
   
-  stopifnot(exprs = length(saliency) == dim(distinctive_features$in_i_not_in_j)[2])
-  
+  n_features <- dim(distinctive_features$in_i_not_in_j)[2]
   n_stimulus <- dim(distinctive_features$in_i_not_in_j)[3]
+  
+  if(missing(saliency)){
+    saliency <- rep(x = 1 / n_features, times = n_features)
+  }
+  
+  stopifnot(exprs = length(saliency) == dim(distinctive_features$in_i_not_in_j)[2])
   
   ftd_ij <- 
     t(apply(X = distinctive_features$in_i_not_in_j, MARGIN = 3, 

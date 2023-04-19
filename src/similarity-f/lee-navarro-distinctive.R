@@ -5,7 +5,7 @@
 
 # Formally, the function returns a matrix with f_ik (1-f_jk) and (1-f_ik) f_jk
 # with dimensions organised in multiple matrix that contain all other stimulus
-# being compared in rows and features in columns
+# being compared in rows and features in columns.
 distinctive_ln <- function(stimulus_features){
   
   n_stimulus <- nrow(stimulus_features)
