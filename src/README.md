@@ -69,6 +69,9 @@ the sampling methods in `~/sampling-f`.
 
 TO DO
 
+- Need to write the function to calculate the product of the transition 
+probabilities of all other chains. 
+
 - Start the forward filter backward sampling function for the first trial.
 
 - Program a function that can take two vectors of states and return the product
