@@ -1,32 +1,35 @@
 # Function that applies the forward filter backward sample algorithm to a 
 # set of chains. 
 
-# NOTE: unobserved_states should be organized with trial number as row and 
-# stimulus number in the columns.
+# NOTE: unobserved_states should be organized with trial number as column and 
+# stimulus number in rows.
 
 forward_backward <- function(update_stimulus_id, unobserved_states, responses,
-                             similarity,
+                             similarity, n_states,
                              response_error, initial_probability, 
                              inertia_category_a, inertia_category_b){
   
-  if (length(x = responses) != dim(unobserved_states)[1]){
+  source(file = "src/sampling-f/transition-others.R")
+  source(file = "src/sampling-f/logit.R")
+  
+  if (length(x = responses) != dim(x = unobserved_states)[2]){
     stop("Number of responses is larger than number of trials")
   }
   
-  n_states <- length(x = unique(x = unobserved_states[, update_stimulus_id]))
-  
-  n_stimulus_rest <- dim()
-  
   total_trials <- length(x = responses)
   
-  conditional_predictive <- matrix(data = NA, nrow = total_trials,
-                                   ncol = n_states)
+  states_rest <- unobserved_states[-update_stimulus_id, ]
   
-  conditional_filtered <- matrix(data = NA, nrow = total_trials,
-                                 ncol = n_states)
+  similarity_to_others <- similarity[-update_stimulus_id,]
   
-  conditional_filtered_rest <- matrix(data = NA, nrow = total_trials,
-                                      ncol = n_states)
+  conditional_predictive <- matrix(data = NA, nrow = n_states,
+                                   ncol = total_trials)
+  
+  conditional_filtered <- matrix(data = NA, nrow = n_states,
+                                 ncol = total_trials)
+  
+  conditional_filtered_rest <- matrix(data = NA, nrow = n_states,
+                                      ncol = total_trials)
   
   if (is.na(responses[1])) {
     response_state <- c(1, 1)
@@ -38,27 +41,55 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
                           (1-response_error)^responses[1])
   }
   
-  conditional_predictive[1, ] <- c(1 - initial_probability,
+  conditional_predictive[, 1] <- c(1 - initial_probability,
                                    initial_probability)
   
-  conditional_filtered_rest <- 1 # This should be the outcome of a new function
-                                 # that will be implemented in R for now and 
-                                 # moved to c++ hopefully
+  conditional_filtered_rest[, 1] <- 
+    transition_others(state_now = states_rest[, 1],
+                      state_after = states_rest[, 2],
+                      similarity = similarity, current_id = update_stimulus_id,
+                      alpha = inertia_category_a, beta = inertia_category_b)
   
-  print(response_state)
-  print(n_states)
-  print(total_trials)
-  print(conditional_predictive)
+  conditional_filtered[, 1] <- (response_state * 
+    conditional_predictive[, 1] * 
+    conditional_filtered_rest[, 1]) / 
+    sum((response_state * 
+           conditional_predictive[, 1] * 
+           conditional_filtered_rest[, 1]))
+  
+  for (t in 2:total_trials) {
+    
+    relative_sim_others <- sum(similarity_to_others * states_rest[, (t - 1)])
+    print(relative_sim_others)
+    
+    prob_stay_a <- logit(x = inertia_category_a - relative_sim_others)
+    prob_stay_b <- logit(x = inertia_category_b + relative_sim_others)
+    print(c(prob_stay_a,prob_stay_b))
+    conditional_predictive[, t] <- c(
+      prob_stay_a * conditional_filtered[1, (t - 1)] +
+      (1 - prob_stay_b) * conditional_filtered[2, (t - 1)],
+      (1 - prob_stay_a) * conditional_filtered[1, (t - 1)] +
+      prob_stay_b * conditional_filtered[2, (t - 1)])
+  }
 }
 
 
 
 # Test function
 
+a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
+b <- distinctive_ln(stimulus_features = a)
+d <- featural_distance(distinctive_features = b)
+s <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
+
 forward_backward(responses = rbinom(n = 5, size = 1, prob = 0.5), 
                  update_stimulus = 1, 
+                 similarity = s,
+                 n_states = 2,
                  unobserved_states = 
-                   matrix(rbinom(n = 10, size = 1, prob = 0.5),
-                          ncol = 2, nrow = 5),
+                   matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
+                          ncol = 5, nrow = 9),
                  response_error = 0.1,
-                 initial_probability = 0.2)
+                 initial_probability = 0.2,
+                 inertia_category_a = 1, 
+                 inertia_category_b = 1)

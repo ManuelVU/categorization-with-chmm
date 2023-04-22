@@ -64,13 +64,24 @@ the sampling methods in `~/sampling-f`.
   
 ----
 
+### Sampling functions
+
+The directory `~/sampling-f` contains functions used by the sampling methods 
+that are specific to CHMM process. Functions are called in by the code used for 
+data analysis in the `~/analysis` directory.
+
+  - `transition_others.R` function that computes the product of the transition
+  probabilities of all other chains except the one currently being updated. The
+  function takes 6 arguments: the states of all other chains except the one 
+  being updated at the current trial (state_now) and the next trial 
+  (state_after), a symmetric similarity matrix (similarity), the id of the 
+  stimulus that is currently being updated (current_id), an inertia parameter 
+  in favor of category A (alpha) and an inertia parameter in favor of category 
+  B (beta).
 
 ----
 
 TO DO
-
-- Need to write the function to calculate the product of the transition 
-probabilities of all other chains. 
 
 - Start the forward filter backward sampling function for the first trial.
 
