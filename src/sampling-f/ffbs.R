@@ -47,8 +47,10 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   conditional_filtered_rest[, 1] <- 
     transition_others(state_now = states_rest[, 1],
                       state_after = states_rest[, 2],
-                      similarity = similarity, current_id = update_stimulus_id,
-                      alpha = inertia_category_a, beta = inertia_category_b)
+                      similarity = similarity, 
+                      current_id = update_stimulus_id,
+                      alpha = inertia_category_a, 
+                      beta = inertia_category_b)
   
   conditional_filtered[, 1] <- (response_state * 
     conditional_predictive[, 1] * 
@@ -57,20 +59,47 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
            conditional_predictive[, 1] * 
            conditional_filtered_rest[, 1]))
   
-  for (t in 2:total_trials) {
+  for (t in 2:(total_trials-1)) {
     
-    relative_sim_others <- sum(similarity_to_others * states_rest[, (t - 1)])
-    print(relative_sim_others)
+    relative_sim_others <- sum(similarity_to_others * 
+                                 (2 * states_rest[, (t - 1)] - 1))
     
     prob_stay_a <- logit(x = inertia_category_a - relative_sim_others)
     prob_stay_b <- logit(x = inertia_category_b + relative_sim_others)
-    print(c(prob_stay_a,prob_stay_b))
+    
     conditional_predictive[, t] <- c(
       prob_stay_a * conditional_filtered[1, (t - 1)] +
       (1 - prob_stay_b) * conditional_filtered[2, (t - 1)],
       (1 - prob_stay_a) * conditional_filtered[1, (t - 1)] +
       prob_stay_b * conditional_filtered[2, (t - 1)])
+    
+    if (is.na(responses[t])) {
+      response_state <- c(1, 1)
+    } 
+    else {
+      response_state <- c(response_error^responses[t] * 
+                            (1 - response_error)^(1 - responses[t]),
+                          response_error^(1 - responses[t]) * 
+                            (1-response_error)^responses[t])
+    }
+    
+    conditional_filtered_rest[, t] <- 
+      transition_others(state_now = states_rest[, t],
+                        state_after = states_rest[, (t + 1)],
+                        similarity = similarity, 
+                        current_id = update_stimulus_id,
+                        alpha = inertia_category_a, 
+                        beta = inertia_category_b)
+    
+    conditional_filtered[, t] <-
+      (response_state * 
+      conditional_predictive[, t] * 
+      conditional_filtered_rest[, t]) / 
+      sum((response_state *
+             conditional_predictive[, t] *
+             conditional_filtered_rest[, t]))
   }
+  print(conditional_filtered)
 }
 
 
