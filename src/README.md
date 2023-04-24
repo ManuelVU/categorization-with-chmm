@@ -70,6 +70,9 @@ The directory `~/sampling-f` contains functions used by the sampling methods
 that are specific to CHMM process. Functions are called in by the code used for 
 data analysis in the `~/analysis` directory.
 
+  - `logit.R` function that takes a value x and returns the logit of x, defined
+  as $$\frac{1}{1+e^{-x}}$$.
+
   - `transition_others.R` function that computes the product of the transition
   probabilities of all other chains except the one currently being updated. The
   function takes 6 arguments: the states of all other chains except the one 
@@ -78,12 +81,22 @@ data analysis in the `~/analysis` directory.
   stimulus that is currently being updated (current_id), an inertia parameter 
   in favor of category A (alpha) and an inertia parameter in favor of category 
   B (beta).
+  
+  - `ffbs.R` forward filter backward sample algorithm, the function takes a 
+  stimulus id (update_stimulus_id), a set of unobserved states 
+  (unobserved_states) and a vector of responses (responses) and calculates the 
+  conditional filtered probabilities used in by the backward sample algorithm 
+  to generate a posterior sample of the states chain associated with the 
+  stimulus being updated. The function also requires the following data:
+  a symmetric similarity matrix (similarity; used by the `transition_others.R` 
+  function), the number of possible states a chain can take (n_states), a value
+  for the response error parameter (response_error), an initial probability 
+  of size equal to the number of states minus one, an inertia parameter in 
+  favor of category A and one for category B. The function returns a sample of 
+  the unobserved states for the given stimulus and the sum of the log-likelihood 
+  for the sequence in the form of a list.
 
 ----
 
 TO DO
 
-- Start the forward filter backward sampling function for the first trial.
-
-- Program a function that can take two vectors of states and return the product
-of the transition probabilities.

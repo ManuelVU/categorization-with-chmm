@@ -64,18 +64,3 @@ transition_others <- function(state_now, state_after, similarity, current_id,
   }
   return(transition_prob)
 }
-
-
-# test
-
-a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
-b <- distinctive_ln(stimulus_features = a)
-d <- featural_distance(distinctive_features = b)
-s <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
-
-transition_others(state_now =   c(0,0,1,1,0,0,1,1),
-                  state_after = c(0,1,0,1,0,1,0,1),
-                  current_id = 5,
-                  similarity = s,
-                  alpha = 0, beta = 0)
-
