@@ -71,7 +71,7 @@ that are specific to CHMM process. Functions are called in by the code used for
 data analysis in the `~/analysis` directory.
 
   - `logit.R` function that takes a value x and returns the logit of x, defined
-  as $$\frac{1}{1+e^{-x}}$$.
+  as $$\frac{1}{1+e^{-x}}.$$
 
   - `transition_others.R` function that computes the product of the transition
   probabilities of all other chains except the one currently being updated. The
@@ -100,3 +100,6 @@ data analysis in the `~/analysis` directory.
 
 TO DO
 
+Need a function that can update all stimulus unobserved values in a single 
+pass using the ffbs function, then we could do some parallel computing using 
+that function.
