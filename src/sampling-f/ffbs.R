@@ -5,7 +5,7 @@
 # stimulus number in rows.
 
 forward_backward <- function(update_stimulus_id, unobserved_states, responses,
-                             similarity, n_states,
+                             similarity, n_states, total_trials,
                              response_error, initial_probability, 
                              inertia_category_a, inertia_category_b){
   
@@ -16,7 +16,9 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
     stop("Number of responses is larger than number of trials")
   }
   
-  total_trials <- length(x = responses)
+  if (missing(total_trials)) {
+    total_trials <- length(x = responses)
+  }
   
   states_rest <- unobserved_states[-update_stimulus_id, ]
   

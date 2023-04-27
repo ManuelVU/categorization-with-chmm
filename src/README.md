@@ -100,10 +100,6 @@ data analysis in the `~/analysis` directory.
 
 TO DO
 
-Need to change ffsb function to allow for a total trials variable to be specified
-by the user instead of allowing the total number of trials to be equal to the 
-length of the response vector.
-
 Need a function that can update all stimulus unobserved values in a single 
 pass using the ffbs function, then we could do some parallel computing using 
 that function.
