@@ -104,10 +104,9 @@ Need a function that can update all stimulus unobserved values in a single
 pass using the ffbs function, then we could do some parallel computing using 
 that function.
 
-Function that computes the gradient and the posterior density for samples 
-from the two inertia parameters in the model. This functions will be used 
-by the Hamiltonian algorithm in order to generate proposals for the parameter 
-chains.
+Function that computes the gradient from the two inertia parameters in the 
+model. This function will be used by the Hamiltonian algorithm in order to 
+generate proposals.
 
 Hamiltonian Monte Carlo function that generates samples for the inertia 
 parameters in the model (needs gradient and and posterior density functions).
