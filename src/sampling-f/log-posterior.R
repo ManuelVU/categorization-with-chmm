@@ -1,7 +1,7 @@
 # Function that calculates the logarithm of the joint full conditional for the 
 # alpha and beta parameters in the model.
 
-log_posterior <- function(alpha_tilde, beta_tilde, states, 
+log_posterior <- function(states, alpha_tilde, beta_tilde,
                           alpha_prior, beta_prior,
                           similarity, total_trials, n_stimulus){
   

@@ -70,31 +70,71 @@ The directory `~/sampling-f` contains functions used by the sampling methods
 that are specific to CHMM process. Functions are called in by the code used for 
 data analysis in the `~/analysis` directory.
 
-  - `logit.R` function that takes a value x and returns the logit of x, defined
-  as $$\frac{1}{1+e^{-x}}.$$
+  - `logit.R` function that takes a value `x` and returns the logit of $x$, 
+  defined as: $$\frac{1}{1+e^{-x}}.$$
 
   - `transition_others.R` function that computes the product of the transition
   probabilities of all other chains except the one currently being updated. The
   function takes 6 arguments: the states of all other chains except the one 
-  being updated at the current trial (state_now) and the next trial 
-  (state_after), a symmetric similarity matrix (similarity), the id of the 
-  stimulus that is currently being updated (current_id), an inertia parameter 
-  in favor of category A (alpha) and an inertia parameter in favor of category 
-  B (beta).
+  being updated at the current trial (`state_now`) and the next trial 
+  (`state_after`), a symmetric similarity matrix (`similarity`), the id of the 
+  stimulus that is currently being updated (`current_id`), an inertia parameter 
+  in favor of category A (`alpha`) and an inertia parameter in favor of category 
+  B (`beta`).
   
   - `ffbs.R` forward filter backward sample algorithm, the function takes a 
-  stimulus id (update_stimulus_id), a set of unobserved states 
-  (unobserved_states) and a vector of responses (responses) and calculates the 
-  conditional filtered probabilities used in by the backward sample algorithm 
-  to generate a posterior sample of the states chain associated with the 
+  stimulus id (`update_stimulus_id`), a set of unobserved states 
+  (`unobserved_states`) and a vector of responses (`responses`) and calculates 
+  the conditional filtered probabilities used in by the backward sample 
+  algorithm to generate a posterior sample of the states associated with the 
   stimulus being updated. The function also requires the following data:
-  a symmetric similarity matrix (similarity; used by the `transition_others.R` 
-  function), the number of possible states a chain can take (n_states), a value
-  for the response error parameter (response_error), an initial probability 
-  of size equal to the number of states minus one, an inertia parameter in 
-  favor of category A and one for category B. The function returns a sample of 
-  the unobserved states for the given stimulus and the sum of the log-likelihood 
-  for the sequence in the form of a list.
+  a symmetric similarity matrix (`similarity`; used by `transition_others.R` 
+  function), the number of possible states a chain can take (`n_states`), a 
+  value for the response error parameter (`response_error`), a value of the 
+  initial state probability distribution $\gamma$ of size equal to the number of 
+  states minus one (`initial_probability`), an inertia parameter in favor of 
+  category A (`inertia_category_a`) and one for category B 
+  (`inertia_category_b`). The function returns a sample of the unobserved states 
+  for the given stimulus and the sum of the log-likelihood for the sequence in 
+  the form of a list.
+  
+  - `gamma-update.R` single sample of the posterior distribution of the initial
+  state probability parameter $\gamma$. The function takes as arguments a vector
+  of the initial states $X_{t=1}^{[1:C,\ 1:P]}$ of all participants and 
+  stimulus (`initial_states`), and a two dimensional vector with the parameters 
+  of the prior distribution of the parameter `gamma_prior`. The function returns
+  a single sample of the conditional posterior probability of $\gamma$.
+  
+  - `gradient-inertia.R` partial derivative of the full joint posterior 
+  distribution of the logarithm of the inertia parameters in the categorization 
+  model ($\tilde{\alpha} = ln(\alpha)$ and $\tilde{\beta} = ln(\beta)$). The 
+  function takes as arguments the current sample of the hidden states for a 
+  fixed participant P $X_{t=1}^{[1:C,\ P]}$ (`states`), a value of the logarithm 
+  of the inertia parameters (`alpha_tilde` and `beta_tilde`), two vectors with 
+  the value of the parameters of the gamma prior distribution of the inertia 
+  parameters (`alpha_prior` and `beta_prior`), a similarity matrix 
+  (`similarity`), the total number of trials (`total_trials`) and the total 
+  number of stimulus (`n_stimulus`). The function returns a vector with the 
+  value of the partial derivative of the fill joint conditional posterior 
+  distribution of $\tilde{\alpha}$ and $\tilde{\beta}$ as a two dimensional 
+  vector in the order ($\tilde{\alpha}$, $\tilde{\beta}$). This function is used 
+  exclusively by `hamiltoninan-mc.R`.
+
+  - `log-posterior.R` calculates the logarithm of the logarithm of the full 
+  joint conditional posterior distribution of the logarithm of the inertia 
+  parameters in the categorization model ($\tilde{\alpha} = ln(\alpha)$ and 
+  $\tilde{\beta} = ln(\beta)$). The function takes as arguments the current 
+  sample of the hidden states for a fixed participant P $X_{t=1}^{[1:C,\ P]}$ 
+  (`states`), a value of the logarithm  of the inertia parameters (`alpha_tilde` 
+  and `beta_tilde`), two vectors with the value of the parameters of the gamma 
+  prior distribution of the inertia parameters (`alpha_prior` and `beta_prior`), 
+  a similarity matrix (`similarity`), the total number of trials 
+  (`total_trials`) and the total number of stimulus (`n_stimulus`). The function
+  returns a single value with the evaluation of the logarithm of the full joint
+  conditional posterior distribution of the parameters $\tilde{\alpha}$ and 
+  $\tilde{\beta}$ evaluated at the values `alpha_tilde` and `beta_tilde`. This 
+  function is used exclusively by `hamiltoninan-mc.R`. 
+
 
 ----
 
@@ -103,10 +143,6 @@ TO DO
 Need a function that can update all stimulus unobserved values in a single 
 pass using the ffbs function, then we could do some parallel computing using 
 that function.
-
-Function that computes the gradient from the two inertia parameters in the 
-model. This function will be used by the Hamiltonian algorithm in order to 
-generate proposals.
 
 Hamiltonian Monte Carlo function that generates samples for the inertia 
 parameters in the model (needs gradient and and posterior density functions).
