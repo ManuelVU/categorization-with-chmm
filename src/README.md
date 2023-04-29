@@ -133,7 +133,20 @@ data analysis in the `~/analysis` directory.
   returns a single value with the evaluation of the logarithm of the full joint
   conditional posterior distribution of the parameters $\tilde{\alpha}$ and 
   $\tilde{\beta}$ evaluated at the values `alpha_tilde` and `beta_tilde`. This 
-  function is used exclusively by `hamiltoninan-mc.R`. 
+  function is used exclusively by `hamiltoninan-mc.R`.
+  
+  - `hamiltonian-mc.R` Hamiltonian Monte Carlo algorithm. The function takes 
+  nine arguments, the current sample of the states (`states`), the values of the
+  logarithm of the inertia parameters (`alpha_tilde` and `beta_tilde`), two 
+  vectors with the values of the parameters of the prior distribution of the 
+  inertia parameters $\alpha$ and $\beta$ (`alpha_prior` and `beta_prior`), a 
+  similarity matrix (`similarity`), a step size for the Hamiltonian dynamics 
+  (`epsilon`) a number of leaps used by the leapfrog part of the algorithm and 
+  the potential energy of the current value of the parameters 
+  (`potential_current`). The function returns two elements on a list, first is 
+  a vector with the sampled values of $\tilde{alpha}$ and $\tilde{\beta}$ 
+  respectively, and a value of the potential energy of the sample to be used
+  in the next iteration of the algorithm.
 
 
 ----
