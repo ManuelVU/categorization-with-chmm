@@ -105,6 +105,14 @@ data analysis in the `~/analysis` directory.
   of the prior distribution of the parameter `gamma_prior`. The function returns
   a single sample of the conditional posterior probability of $\gamma$.
   
+  - `epsilon-update.R` single sample of the conditional posterior distribution
+  of the classification error parameter. The function takes as arguments the 
+  current states sample of all participants (`states_all`), participants 
+  responses to all stimulus in the study across trials (`responses_all`) and 
+  the value of the parameters of the beta prior distribution. The function 
+  returns a *p-dimensional* vector of samples where $p$ represents the number of 
+  participants in the study.
+  
   - `gradient-inertia.R` partial derivative of the full joint posterior 
   distribution of the logarithm of the inertia parameters in the categorization 
   model ($\tilde{\alpha} = ln(\alpha)$ and $\tilde{\beta} = ln(\beta)$). The 
@@ -156,6 +164,3 @@ TO DO
 Need a function that can update all stimulus unobserved values in a single 
 pass using the ffbs function, then we could do some parallel computing using 
 that function.
-
-Hamiltonian Monte Carlo function that generates samples for the inertia 
-parameters in the model (needs gradient and and posterior density functions).
