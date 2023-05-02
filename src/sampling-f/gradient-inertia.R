@@ -5,7 +5,7 @@ gradient_inertia <- function(states, alpha_tilde, beta_tilde,
                              alpha_prior, beta_prior, similarity, 
                              total_trials, n_stimulus){
   
-  gradient <- c(0,1)
+  gradient <- c(0, 0)
   
   e_alpha_tilde <- exp(alpha_tilde)
   e_beta_tilde <- exp(beta_tilde)

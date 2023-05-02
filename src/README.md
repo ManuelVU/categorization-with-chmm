@@ -96,7 +96,13 @@ data analysis in the `~/analysis` directory.
   category A (`inertia_category_a`) and one for category B 
   (`inertia_category_b`). The function returns a sample of the unobserved states 
   for the given stimulus and the sum of the log-likelihood for the sequence in 
-  the form of a list.
+  the form of a list. This function is used by the `forward_backward_all` 
+  function in `participant-chains-update.R`.
+  
+  - `participant-chains-update.R` function in this file applies the forward 
+  filter backward sample algorithm to all chains (stimulus) of a single 
+  participant. The function is used by the sampler in order to parallelize some 
+  of the sampling process.
   
   - `gamma-update.R` single sample of the posterior distribution of the initial
   state probability parameter $\gamma$. The function takes as arguments a vector

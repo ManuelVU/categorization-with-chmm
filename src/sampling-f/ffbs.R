@@ -1,8 +1,5 @@
 # Function that applies the forward filter backward sample algorithm to a 
-# set of chains. 
-
-# NOTE: unobserved_states should be organized with trial number as column and 
-# stimulus number in rows.
+# of a single chain in a given participant. 
 
 forward_backward <- function(update_stimulus_id, unobserved_states, responses,
                              similarity, n_states, total_trials,
