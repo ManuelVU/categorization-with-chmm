@@ -59,7 +59,7 @@ the sampling methods in `~/sampling-f`.
   and j for a given decay_rate and decay_function which represent the speed at
   which similarity decays with distance and the function of that decay. Function
   takes 3 arguments, a decay_rate, a decay_function value and a distance matrix.
-  currently can only take a symmetric matrix based on Lee and Navarro's fetural
+  currently can only take a symmetric matrix based on Lee and Navarro's featural
   distance measure.
   
 ----

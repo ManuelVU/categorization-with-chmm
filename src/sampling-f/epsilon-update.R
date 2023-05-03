@@ -14,10 +14,14 @@ epsilon_update <- function(states_all, responses_all, epsilon_prior){
   correct_s1 <- (states_all == 1 & responses_all == 1) |> 
     apply(MARGIN = 3, FUN = sum, na.rm = TRUE)
   
-  print(epsilon_prior[1] + error_s0[2] + error_s1[2])
-  print(epsilon_prior[2] + correct_s0[2] + correct_s1[2])
+  mixing <- rbinom(n = length(correct_s1), size = 1, prob = 0.5)
   
-  return(rbeta(n = length(correct_s1), 
-               shape1 = epsilon_prior[1] + error_s0 + error_s1,
-               shape2 = epsilon_prior[2] + correct_s0 + correct_s1))
+  mixture <- mixing * rbeta(n = length(correct_s1), 
+                            shape1 = epsilon_prior[1] + error_s0,
+                            shape2 = epsilon_prior[2] + correct_s0) +
+            (1 - mixing) * rbeta(n = length(correct_s1), 
+                                 shape1 = epsilon_prior[1] + error_s1,
+                                 shape2 = epsilon_prior[2] + correct_s1)
+  
+  return(mixture)
 }
