@@ -19,7 +19,7 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   
   states_rest <- unobserved_states[-update_stimulus_id, ]
   
-  similarity_to_others <- similarity[-update_stimulus_id, ]
+  similarity_to_others <- (similarity[update_stimulus_id, ])[update_stimulus_id]
   
   conditional_predictive <- matrix(data = NA, nrow = n_states,
                                    ncol = total_trials)
@@ -64,8 +64,8 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   
   for (t in 2:total_trials) {
     
-    relative_sim_others <- sum(similarity_to_others * 
-                                 (2 * states_rest[, (t - 1)] - 1))
+    relative_sim_others <- similarity_to_others %*%
+      (2 * states_rest[, (t - 1)] - 1)
     
     prob_stay_a <- logit(x = inertia_category_a - relative_sim_others)
     prob_stay_b <- logit(x = inertia_category_b + relative_sim_others)
@@ -122,8 +122,8 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   
   for (t in (total_trials - 1):1) {
     
-    relative_sim_others <- sum(similarity_to_others * 
-                                 (2 * states_rest[, t] - 1))
+    relative_sim_others <- similarity_to_others %*%
+      (2 * states_rest[, t] - 1)
     
     prob_stay_b <- logit(x = inertia_category_b + relative_sim_others)
     
