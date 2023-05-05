@@ -40,7 +40,7 @@ initial_states <- function(n_chains, n_trials, n_participants,
 # d <- featural_distance(distinctive_features = b)
 # sm <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
 # 
-# initial_states(n_chains = 9, n_trials = 20, n_participants = 10, 
-#                similarity = sm, initial_state_probability = 0.5, 
-#                inertia_category_a = rep(x = 0.1, times = 20), 
-#                inertia_category_b = rep(x = 0.1, times = 20))
+# initial_states(n_chains = 9, n_trials = 20, n_participants = 10,
+#                similarity = sm, initial_state_probability = 0.5,
+#                inertia_category_a = rep(x = 10, times = 20),
+#                inertia_category_b = rep(x = 10, times = 20))
