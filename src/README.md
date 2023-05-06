@@ -149,6 +149,13 @@ data analysis in the `~/analysis` directory.
   $\tilde{\beta}$ evaluated at the values `alpha_tilde` and `beta_tilde`. This 
   function is used exclusively by `hamiltoninan-mc.R`.
   
+  - `adjust-stepsize.R` function that adjusts the step-size used for HMC 
+  function, used by `chmm-sampler` during burn-in period if the burn-in contains 
+  at least 100 samples. The function takes as arguments the previous step-size 
+  (`stepsize`), the current acceptance probability (`acceptance_prob`), and the 
+  target acceptance probability of the algorithm (`target_acceptance`); the 
+  function returns a single value for the next step-size.
+  
   - `hamiltonian-mc.R` Hamiltonian Monte Carlo algorithm. The function takes 
   nine arguments, the current sample of the states (`states`), the values of the
   logarithm of the inertia parameters (`alpha_tilde` and `beta_tilde`), two 
@@ -161,6 +168,26 @@ data analysis in the `~/analysis` directory.
   a vector with the sampled values of $\tilde{alpha}$ and $\tilde{\beta}$ 
   respectively, and a value of the potential energy of the sample to be used
   in the next iteration of the algorithm.
+  
+  - `sample-prior-states.R` function that generates initial values for the 
+  hidden states of the CHMM. The function takes the following arguments: the 
+  number of chains or stimulus (`n_chains`), the number of trials per 
+  participant (`n_trials`), the number of participants (`n_participants`), 
+  the similarity between stimulus (`similarity`), the initial probability 
+  distribution over possible states (`initial_state_probability`), the inertia
+  parameter in favor of category a and b (`inertia_category_a`, 
+  `inertia_category_b`) respectively. The output of the function is an array 
+  of size equal to the number of stimulus times the maximum number of trials 
+  times the number of participants.
+  
+  - `transform-data-chmm.R` function that takes a directory to the experimental 
+  data and the stimulus features and returns a list that contains the responses 
+  by trial by participant in the experiment, the number of trials each 
+  participant responded to and the features of the stimulus used in the 
+  experiment. The output can be passed directly to the function in 
+  `chmm-sampler.R` to start the analysis. 
+  
+  
 
 
 ----
