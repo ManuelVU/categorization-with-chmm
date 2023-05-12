@@ -197,3 +197,7 @@ TO DO
 Need a function that can update all stimulus unobserved values in a single 
 pass using the ffbs function, then we could do some parallel computing using 
 that function.
+
+Need to adjust functions so that they can take into account the different number
+of trials for each participant.
+
