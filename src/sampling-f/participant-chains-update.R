@@ -3,18 +3,14 @@
 # sampler
 
 forward_backward_all <- function(states_current, responses, similarity, 
-                                 n_states, epsilon, gamma, 
-                                 alpha, beta){
-  
-  total_chains <- dim(states_current)[1]
-  
-  total_trials <- dim(states_current)[2]
-  
+                                 n_states, total_trials, total_chains, 
+                                 epsilon, gamma, alpha, beta){
+    
   for(k in 1:total_chains){
     
     updated_chain <- forward_backward(update_stimulus_id = k,
                                       unobserved_states = states_current,
-                                      responses = responses,
+                                      responses = responses[k, ],
                                       similarity = similarity,
                                       n_states = n_states,
                                       total_trials = total_trials,

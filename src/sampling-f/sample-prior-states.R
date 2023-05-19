@@ -37,11 +37,11 @@ initial_states <- function(n_chains, n_trials, n_participants,
 }
 
 # test
-b <- distinctive_ln(stimulus_features = this$stimulus_features)
-d <- featural_distance(distinctive_features = b)
-sm <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
-
-initial_states(n_chains = 9, n_trials = rep(200,19), n_participants = 19,
-               similarity = sm, initial_state_probability = 0.5,
-               inertia_category_a = rgamma(n = 19,shape = 2, rate = 1),
-               inertia_category_b = rgamma(n = 19,shape = 2, rate = 1))
+# b <- distinctive_ln(stimulus_features = this$stimulus_features)
+# d <- featural_distance(distinctive_features = b)
+# sm <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
+# 
+# initial_states(n_chains = 9, n_trials = rep(200,19), n_participants = 19,
+#                similarity = sm, initial_state_probability = 0.5,
+#                inertia_category_a = rgamma(n = 19,shape = 2, rate = 1),
+#                inertia_category_b = rgamma(n = 19,shape = 2, rate = 1))

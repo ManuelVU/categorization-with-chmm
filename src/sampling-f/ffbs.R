@@ -9,17 +9,11 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   source(file = "src/sampling-f/transition-others.R")
   source(file = "src/sampling-f/logit.R")
   
-  if (length(x = responses) != dim(x = unobserved_states)[2]){
-    stop("Number of responses is larger than number of trials")
-  }
-  
-  if (missing(total_trials)) {
-    total_trials <- length(x = responses)
-  }
-  
   states_rest <- unobserved_states[-update_stimulus_id, ]
   
-  similarity_to_others <- (similarity[update_stimulus_id, ])[update_stimulus_id]
+  diag(similarity) <- 0
+  
+  similarity_to_others <- (similarity[update_stimulus_id, ])[-update_stimulus_id]
   
   conditional_predictive <- matrix(data = NA, nrow = n_states,
                                    ncol = total_trials)
@@ -127,7 +121,7 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
     
     prob_stay_b <- logit(x = inertia_category_b + relative_sim_others)
     
-    if (unobserved_states[(t + 1), update_stimulus_id] == 1) {
+    if (unobserved_states[update_stimulus_id, (t + 1)] == 1) {
       
       prob_category_b <- (prob_stay_b * conditional_filtered[2, t]) /
         conditional_predictive[2, (t + 1)]

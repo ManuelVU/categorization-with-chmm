@@ -90,10 +90,10 @@ simulate_chmm <- function(n_participants, n_trials, experiment, n_stimulus,
 
 
 
-# test
-simulate_chmm(n_participants = 3, n_trials = 5, n_stimulus = 9,
-              experiment = "lee_navarro", gamma = 0.5, 
-              epsilon_p = c(0.01, 0.01, 0.01),
-              alpha_p = c(0.1, 2, 5),
-              beta_p = c(0.1, 2, 5))
+# # test
+# simulate_chmm(n_participants = 3, n_trials = 5, n_stimulus = 9,
+#               experiment = "lee_navarro", gamma = 0.5, 
+#               epsilon_p = c(0.01, 0.01, 0.01),
+#               alpha_p = c(0.1, 2, 5),
+#               beta_p = c(0.1, 2, 5))
 
