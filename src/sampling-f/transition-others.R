@@ -64,3 +64,4 @@ transition_others <- function(state_now, state_after, similarity, current_id,
   }
   return(transition_prob)
 }
+

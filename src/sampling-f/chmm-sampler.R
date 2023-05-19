@@ -71,34 +71,78 @@ chmm_sampling <- function(data_chmm,
   # Initialize step size and number of steps for HMC
   step_size <- 0.03
   n_leaps <- 30
+  acc <- c(1)
+  
+  # Start progress bar
+  
+  progress <- txtProgressBar(min = 0, max = 100, initial = 1)
   
   # Start sampler
   for (sample in 2:n_iterations) {
-    # st <- foreach(pp = 1:participants) %dopar% {
-    for (pp in 1:participants) {
-      forward_backward_all(states_current = 
-                             sample_states[, 1:trials_participant[pp], pp, 
-                                           (sample - 1)],
-                           responses = responses[, 1:trials_participant[pp], pp],
-                           similarity = stimulus_similarity,
-                           n_states = 2, 
-                           total_trials = trials_participant[pp],
-                           total_chains = stimulus,
-                           epsilon = sample_epsilon[(sample - 1), pp],
-                           gamma = sample_gamma[(sample - 1)],
-                           alpha = sample_alpha[(sample - 1), pp],
-                           beta = sample_beta[(sample - 1), pp])
-    }
-    # }
-    
-  # Move current sample of states to sample array
-    # for (pp in 1:participants) {
-    #   sample_states[, , pp, sample] <- st[[pp]]
-    # }
-    
-  }
   
-  return(sample_states)
+    # Update participants states in parallel
+    st <- foreach(pp = 1:participants) %dopar% {
+        forward_backward_all(states_current =
+                               sample_states[, 1:trials_participant[pp], pp,
+                                             (sample - 1)],
+                             responses = responses[, 1:trials_participant[pp], pp],
+                             similarity = stimulus_similarity,
+                             n_states = 2,
+                             total_trials = trials_participant[pp],
+                             total_chains = stimulus,
+                             epsilon = sample_epsilon[(sample - 1), pp],
+                             gamma = sample_gamma[(sample - 1)],
+                             alpha = sample_alpha[(sample - 1), pp],
+                             beta = sample_beta[(sample - 1), pp])
+    }
+
+    # Move current updated state values to sample array
+    for (pp in 1:participants) {
+      sample_states[, 1:trials_participant[pp], pp, sample] <- st[[pp]]
+    }
+    
+    # Use Hamiltonian MC to update participant's alpha and beta in parallel
+    hm <- foreach(pp = 1:participants) %dopar% {
+      hamiltonian_mc(states = sample_states[, 1:trials_participant[pp], pp, 
+                                            sample],
+                     alpha_tilde = log(sample_alpha[(sample - 1), pp]),
+                     beta_tilde = log(sample_beta[(sample - 1), pp]),
+                     alpha_prior = c(2, 1), beta_prior = c(2, 1),
+                     similarity = stimulus_similarity,
+                     leap = n_leaps, 
+                     leap_size = step_size)
+    }
+    
+    # Transform and update participants alpha and beta
+    for (pp in 1:participants) {
+      sample_alpha[sample, pp] <- exp(hm[[pp]][[1]][1])
+      sample_beta[sample, pp] <- exp(hm[[pp]][[1]][2])
+      acc <- append(x = acc, values = hm[[pp]][[1]][3])
+    }
+    
+    # Update gamma parameter
+    sample_gamma[sample] <- gamma_update(
+      initial_states = sample_states[, 1, , sample],
+      gamma_prior = c(1, 1))
+    
+    # Update epsilon parameter
+    sample_epsilon[sample, ] <- epsilon_update(
+      states_all = sample_states[, , , sample],
+      responses_all = responses,
+      epsilon_prior = c(5, 50))
+    
+    # Update step size during burn in for Hamiltonian
+    if ((sample %% 100) == 0 & (sample <= n_burn)) {
+      step_size <- adjust_step(step_size = step_size, 
+                               acceptance_prob = mean(acc),
+                               target_acceptance = 0.7)
+      acc <- c()
+    }
+    
+    # Update progress bar
+    setTxtProgressBar(pb = progress, value = sample/n_iterations)
+    close(progress)
+  }
 }
 
 
@@ -111,14 +155,14 @@ chmm_sampling <- function(data_chmm,
 # 
 # 
 chmm_sampling(data_chmm = this,
-              n_iterations = 3,
-              n_burn = 10,
+              n_iterations = 10,
+              n_burn = 1,
               n_cores = 4,
               parameters_initial_values =
                 list("gamma" = 0.5,
                      "epsilon" = rbeta(n = dim(this$response)[3],
-                                       shape1 = 6,
-                                       shape2 = 60),
+                                       shape1 = 5,
+                                       shape2 = 50),
                      "alpha" = rgamma(n = dim(this$response)[3],
                                       shape = 2, rate = 1),
                      "beta" = rgamma(n = dim(this$response)[3],

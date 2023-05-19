@@ -4,8 +4,7 @@
 hamiltonian_mc <- function(states, alpha_tilde, beta_tilde, 
                            alpha_prior, beta_prior,
                            similarity,
-                           epsilon, leap, 
-                           potential_current) {
+                           leap_size, leap) {
   
   total_trials <- dim(states)[2]
   
@@ -19,7 +18,7 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
   
   momentum_current <- momentum
   
-  momentum <- momentum - epsilon * gradient_inertia(states = states, 
+  momentum <- momentum - leap_size * gradient_inertia(states = states, 
                                                     alpha_tilde = alpha_tilde,
                                                     beta_tilde = beta_tilde,
                                                     alpha_prior = alpha_prior,
@@ -32,10 +31,10 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
   
   for (k in 1:leap) {
     
-    position <- position + epsilon * momentum
+    position <- position + leap_size * momentum
     
     if (k != leap) {
-      momentum <- momentum - epsilon * 
+      momentum <- momentum - leap_size * 
         gradient_inertia(states = states, 
                          alpha_tilde = alpha_tilde,
                          beta_tilde = beta_tilde,
@@ -47,7 +46,7 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
     }
   }
   
-  momentum <- momentum - epsilon * gradient_inertia(states = states, 
+  momentum <- momentum - leap_size * gradient_inertia(states = states, 
                                                     alpha_tilde = alpha_tilde,
                                                     beta_tilde = beta_tilde,
                                                     alpha_prior = alpha_prior,
@@ -57,6 +56,15 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
                                                     n_stimulus = n_stimulus) / 2
   
   momentum <- -momentum
+  
+  potential_current <- log_posterior(states = states, 
+                                      alpha_tilde = current_position[1],
+                                      beta_tilde = current_position[2],
+                                      alpha_prior = alpha_prior,
+                                      beta_prior = beta_prior,
+                                      similarity = similarity,
+                                      total_trials = total_trials,
+                                      n_stimulus = n_stimulus)
   
   potential_proposed <- log_posterior(states = states, 
                                       alpha_tilde = position[1],
@@ -75,8 +83,8 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
                                   kinetic_current - kinetic_proposed)
 
   ifelse(test = runif(n = 1) < acceptance_probability, 
-         yes = return(list(position, potential_proposed)),
-         no = return(list(current_position, potential_current)))
+         yes = return(list(position, 1)),
+         no = return(list(current_position, 0)))
 }
 
 # test
@@ -94,7 +102,6 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
 #               total_trials = 5, n_stimulus = 9, similarity = sm,
 #               alpha_prior = c(1, 1), beta_prior = c(1, 1))
 # 
-# hamiltonian_mc(states = st, alpha_tilde = 1, beta_tilde = 2, 
+# hamiltonian_mc(states = st, alpha_tilde = 1, beta_tilde = 2,
 #                alpha_prior = c(1, 1), beta_prior = c(1, 1),
-#                similarity = sm, epsilon = 0.05, leap = 20,
-#                potential_current = lp)
+#                similarity = sm, leap_size = 0.05, leap = 20)

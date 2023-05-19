@@ -2,9 +2,7 @@
 
 adjust_step <- function(step_size, acceptance_prob, target_acceptance){
  
-   x <- 1 + 1000 * (acceptance_prob - target_acceptance) ^ 3
-   
-   print(x)
+  x <- 1 + 1000 * (acceptance_prob - target_acceptance) ^ 3
   
   return(ifelse(test = x < 0.9, 
                 yes = step_size * 0.9,

@@ -70,18 +70,23 @@ The directory `~/sampling-f` contains functions used by the sampling methods
 that are specific to CHMM process. Functions are called in by the code used for 
 data analysis in the `~/analysis` directory.
 
-  - `logit.R` function that takes a value `x` and returns the logit of $x$, 
-  defined as: $$\frac{1}{1+e^{-x}}.$$
-
-  - `transition_others.R` function that computes the product of the transition
-  probabilities of all other chains except the one currently being updated. The
-  function takes 6 arguments: the states of all other chains except the one 
-  being updated at the current trial (`state_now`) and the next trial 
-  (`state_after`), a symmetric similarity matrix (`similarity`), the id of the 
-  stimulus that is currently being updated (`current_id`), an inertia parameter 
-  in favor of category A (`alpha`) and an inertia parameter in favor of category 
-  B (`beta`).
+  - `adjust-stepsize.R` function that adjusts the step-size used for HMC 
+  function, used by `chmm-sampler` during burn-in period if the burn-in contains 
+  at least 100 samples. The function takes as arguments the previous step-size 
+  (`stepsize`), the current acceptance probability (`acceptance_prob`), and the 
+  target acceptance probability of the algorithm (`target_acceptance`); the 
+  function returns a single value for the next step-size.
   
+  - `chmm-sampler.R`
+  
+  - `epsilon-update.R` single sample of the conditional posterior distribution
+  of the classification error parameter. The function takes as arguments the 
+  current states sample of all participants (`states_all`), participants 
+  responses to all stimulus in the study across trials (`responses_all`) and 
+  the value of the parameters of the beta prior distribution. The function 
+  returns a *p-dimensional* vector of samples where $p$ represents the number of 
+  participants in the study.
+
   - `ffbs.R` forward filter backward sample algorithm, the function takes a 
   stimulus id (`update_stimulus_id`), a set of unobserved states 
   (`unobserved_states`) and a vector of responses (`responses`) and calculates 
@@ -99,25 +104,12 @@ data analysis in the `~/analysis` directory.
   the form of a list. This function is used by the `forward_backward_all` 
   function in `participant-chains-update.R`.
   
-  - `participant-chains-update.R` function in this file applies the forward 
-  filter backward sample algorithm to all chains (stimulus) of a single 
-  participant. The function is used by the sampler in order to parallelize some 
-  of the sampling process.
-  
   - `gamma-update.R` single sample of the posterior distribution of the initial
   state probability parameter $\gamma$. The function takes as arguments a vector
   of the initial states $X_{t=1}^{[1:C,\ 1:P]}$ of all participants and 
   stimulus (`initial_states`), and a two dimensional vector with the parameters 
   of the prior distribution of the parameter `gamma_prior`. The function returns
   a single sample of the conditional posterior probability of $\gamma$.
-  
-  - `epsilon-update.R` single sample of the conditional posterior distribution
-  of the classification error parameter. The function takes as arguments the 
-  current states sample of all participants (`states_all`), participants 
-  responses to all stimulus in the study across trials (`responses_all`) and 
-  the value of the parameters of the beta prior distribution. The function 
-  returns a *p-dimensional* vector of samples where $p$ represents the number of 
-  participants in the study.
   
   - `gradient-inertia.R` partial derivative of the full joint posterior 
   distribution of the logarithm of the inertia parameters in the categorization 
@@ -133,7 +125,23 @@ data analysis in the `~/analysis` directory.
   distribution of $\tilde{\alpha}$ and $\tilde{\beta}$ as a two dimensional 
   vector in the order ($\tilde{\alpha}$, $\tilde{\beta}$). This function is used 
   exclusively by `hamiltoninan-mc.R`.
-
+  
+  - `hamiltonian-mc.R` Hamiltonian Monte Carlo algorithm. The function takes 
+  nine arguments, the current sample of the states (`states`), the values of the
+  logarithm of the inertia parameters (`alpha_tilde` and `beta_tilde`), two 
+  vectors with the values of the parameters of the prior distribution of the 
+  inertia parameters $\alpha$ and $\beta$ (`alpha_prior` and `beta_prior`), a 
+  similarity matrix (`similarity`), a step size for the Hamiltonian dynamics 
+  (`epsilon`) a number of leaps used by the leapfrog part of the algorithm and 
+  the potential energy of the current value of the parameters 
+  (`potential_current`). The function returns two elements on a list, first is 
+  a vector with the sampled values of $\tilde{alpha}$ and $\tilde{\beta}$ 
+  respectively, and a value of the potential energy of the sample to be used
+  in the next iteration of the algorithm.
+  
+  - `logit.R` function that takes a value `x` and returns the logit of $x$, 
+  defined as: $$\frac{1}{1+e^{-x}}.$$
+  
   - `log-posterior.R` calculates the logarithm of the logarithm of the full 
   joint conditional posterior distribution of the logarithm of the inertia 
   parameters in the categorization model ($\tilde{\alpha} = ln(\alpha)$ and 
@@ -149,25 +157,10 @@ data analysis in the `~/analysis` directory.
   $\tilde{\beta}$ evaluated at the values `alpha_tilde` and `beta_tilde`. This 
   function is used exclusively by `hamiltoninan-mc.R`.
   
-  - `adjust-stepsize.R` function that adjusts the step-size used for HMC 
-  function, used by `chmm-sampler` during burn-in period if the burn-in contains 
-  at least 100 samples. The function takes as arguments the previous step-size 
-  (`stepsize`), the current acceptance probability (`acceptance_prob`), and the 
-  target acceptance probability of the algorithm (`target_acceptance`); the 
-  function returns a single value for the next step-size.
-  
-  - `hamiltonian-mc.R` Hamiltonian Monte Carlo algorithm. The function takes 
-  nine arguments, the current sample of the states (`states`), the values of the
-  logarithm of the inertia parameters (`alpha_tilde` and `beta_tilde`), two 
-  vectors with the values of the parameters of the prior distribution of the 
-  inertia parameters $\alpha$ and $\beta$ (`alpha_prior` and `beta_prior`), a 
-  similarity matrix (`similarity`), a step size for the Hamiltonian dynamics 
-  (`epsilon`) a number of leaps used by the leapfrog part of the algorithm and 
-  the potential energy of the current value of the parameters 
-  (`potential_current`). The function returns two elements on a list, first is 
-  a vector with the sampled values of $\tilde{alpha}$ and $\tilde{\beta}$ 
-  respectively, and a value of the potential energy of the sample to be used
-  in the next iteration of the algorithm.
+  - `participant-chains-update.R` function in this file applies the forward 
+  filter backward sample algorithm to all chains (stimulus) of a single 
+  participant. The function is used by the sampler in order to parallelize some 
+  of the sampling process.
   
   - `sample-prior-states.R` function that generates initial values for the 
   hidden states of the CHMM. The function takes the following arguments: the 
@@ -187,9 +180,15 @@ data analysis in the `~/analysis` directory.
   experiment. The output can be passed directly to the function in 
   `chmm-sampler.R` to start the analysis. 
   
+  - `transition_others.R` function that computes the product of the transition
+  probabilities of all other chains except the one currently being updated. The
+  function takes 6 arguments: the states of all other chains except the one 
+  being updated at the current trial (`state_now`) and the next trial 
+  (`state_after`), a symmetric similarity matrix (`similarity`), the id of the 
+  stimulus that is currently being updated (`current_id`), an inertia parameter 
+  in favor of category A (`alpha`) and an inertia parameter in favor of category 
+  B (`beta`).
   
-
-
 ----
 
 TO DO
