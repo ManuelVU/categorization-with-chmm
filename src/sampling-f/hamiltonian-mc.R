@@ -82,8 +82,10 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
   acceptance_probability <- exp(potential_current - potential_proposed +
                                   kinetic_current - kinetic_proposed)
 
-  ifelse(test = runif(n = 1) < acceptance_probability, 
-         yes = return(list(position, 1)),
+  ifelse(test = is.finite(exp(position[1])) & is.finite(exp(position[2])),
+         yes = ifelse(test = runif(n = 1) < acceptance_probability, 
+                      yes = return(list(position, 1)),
+                      no = return(list(current_position, 0))),
          no = return(list(current_position, 0)))
 }
 
@@ -104,4 +106,4 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
 # 
 # hamiltonian_mc(states = st, alpha_tilde = 1, beta_tilde = 2,
 #                alpha_prior = c(1, 1), beta_prior = c(1, 1),
-#                similarity = sm, leap_size = 0.05, leap = 20)
+#                similarity = sm, leap_size = 0.3, leap = 20)

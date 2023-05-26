@@ -41,6 +41,8 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   conditional_predictive[, 1] <- c(1 - initial_probability,
                                    initial_probability)
   
+  print(c(inertia_category_a, inertia_category_b))
+  
   conditional_filtered_rest[, 1] <- 
     transition_others(state_now = states_rest[, 1],
                       state_after = states_rest[, 2],
@@ -57,7 +59,6 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
            conditional_filtered_rest[, 1]))
   
   for (t in 2:total_trials) {
-    
     relative_sim_others <- similarity_to_others %*%
       (2 * states_rest[, (t - 1)] - 1)
     
@@ -105,7 +106,6 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   # Backward Sample
   
   prob_category_b <- conditional_filtered[2, total_trials]
-  
   
   unobserved_states[update_stimulus_id, total_trials] <- 
     rbinom(n = 1, size = 1, prob = prob_category_b)

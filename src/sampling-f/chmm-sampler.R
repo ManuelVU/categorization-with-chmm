@@ -2,7 +2,8 @@
 
 chmm_sampling <- function(data_chmm,
                           n_iterations, n_burn, n_cores,
-                          parameters_initial_values) {
+                          parameters_initial_values,
+                          start_step_size) {
   
   # Load library for parallel computing and register cores
   library(doParallel)
@@ -69,16 +70,24 @@ chmm_sampling <- function(data_chmm,
   sample_states[, , , 1] <- parameters_initial_values$states
   
   # Initialize step size and number of steps for HMC
-  step_size <- 0.03
+  step_size <- start_step_size
   n_leaps <- 30
-  acc <- c(1)
+  acc <- matrix(data = NA, nrow = participants, ncol = 100)
+  acc[,1] <- rep(x = 1, times = participants)
+  
+  # Start counter for acceptance rate
+  count <- 1
   
   # Start progress bar
   
-  progress <- txtProgressBar(min = 0, max = 100, initial = 1)
+  progress <- txtProgressBar(min = 1, max = n_iterations, style = 3, 
+                             width = 50, char = "=")
   
   # Start sampler
   for (sample in 2:n_iterations) {
+    
+    # Add to count position
+    count <- count + 1
   
     # Update participants states in parallel
     st <- foreach(pp = 1:participants) %dopar% {
@@ -110,14 +119,17 @@ chmm_sampling <- function(data_chmm,
                      alpha_prior = c(2, 1), beta_prior = c(2, 1),
                      similarity = stimulus_similarity,
                      leap = n_leaps, 
-                     leap_size = step_size)
+                     leap_size = step_size[pp])
     }
+    
     
     # Transform and update participants alpha and beta
     for (pp in 1:participants) {
       sample_alpha[sample, pp] <- exp(hm[[pp]][[1]][1])
       sample_beta[sample, pp] <- exp(hm[[pp]][[1]][2])
-      acc <- append(x = acc, values = hm[[pp]][[1]][3])
+      if (sample <= n_burn){
+        acc[pp, count] <- hm[[pp]][[2]]  
+      }
     }
     
     # Update gamma parameter
@@ -129,42 +141,65 @@ chmm_sampling <- function(data_chmm,
     sample_epsilon[sample, ] <- epsilon_update(
       states_all = sample_states[, , , sample],
       responses_all = responses,
-      epsilon_prior = c(5, 50))
+      epsilon_prior = c(10, 100))
     
     # Update step size during burn in for Hamiltonian
     if ((sample %% 100) == 0 & (sample <= n_burn)) {
       step_size <- adjust_step(step_size = step_size, 
-                               acceptance_prob = mean(acc),
+                               acceptance_prob = 
+                                 rowMeans(x = acc, na.rm = TRUE),
                                target_acceptance = 0.7)
-      acc <- c()
+      count <- 0
     }
     
     # Update progress bar
-    setTxtProgressBar(pb = progress, value = sample/n_iterations)
-    close(progress)
+    setTxtProgressBar(pb = progress, value = sample)
   }
+  
+  # Setup output
+  output <- list("posterior_samples" = 
+                   list("gamma" = sample_gamma[(n_burn + 1):n_iterations],
+                        "epsilon" = sample_epsilon[(n_burn + 1):n_iterations, ],
+                        "alpha" = sample_alpha[(n_burn + 1):n_iterations, ],
+                        "beta" = sample_beta[(n_burn + 1):n_iterations, ],
+                        "hidden_states" = 
+                          sample_states[, , , (n_burn + 1):n_iterations]),
+                 "hmc_acceptance" = acc,
+                 "step_size" = step_size)
+  
+  close(progress)
+  
+  return(output)
 }
 
 
 # Test
 # 
 # this <- transform_data_chmm(
-#   directory_data = "data/csv-files/lee-navarro-2002-type4.csv",
-#   directory_features = "data/stimulus-features/lee-navarro-features.csv")
+#   directory_data = "data/csv-files/lewandowsky-2011-type6.csv",
+#   directory_features = "data/stimulus-features/lewandowsky-features.csv")
 # 
+# samples <- chmm_sampling(data_chmm = this,
+#               n_iterations = 2500,
+#               n_burn = 1500,
+#               n_cores = 4,
+#               parameters_initial_values =
+#                 list("gamma" = 0.5,
+#                      "epsilon" = rbeta(n = dim(this$response)[3],
+#                                        shape1 = 10,
+#                                        shape2 = 100),
+#                      "alpha" = rgamma(n = dim(this$response)[3],
+#                                       shape = 2, rate = 1),
+#                      "beta" = rgamma(n = dim(this$response)[3],
+#                                      shape = 2, rate = 1)),
+#               start_step_size = rep(0.0015, dim(this$response)[3]))
 # 
+# mean_states <- apply(X = samples$posterior_samples$hidden_states[,,8,],
+#                      MARGIN = c(1,2), FUN = mean, na.rm =TRUE)
 # 
-chmm_sampling(data_chmm = this,
-              n_iterations = 10,
-              n_burn = 1,
-              n_cores = 4,
-              parameters_initial_values =
-                list("gamma" = 0.5,
-                     "epsilon" = rbeta(n = dim(this$response)[3],
-                                       shape1 = 5,
-                                       shape2 = 50),
-                     "alpha" = rgamma(n = dim(this$response)[3],
-                                      shape = 2, rate = 1),
-                     "beta" = rgamma(n = dim(this$response)[3],
-                                     shape = 2, rate = 1)))
+# difference <- this$response[,1:this$participant_t[8],8] - mean_states[,1:this$participant_t[8]]
+# mode_state <- ifelse(test = mean_states > 0.5, yes = 1, no = 0)
+# 
+# difference <- this$response[,1:this$participant_t[8],8] - mode_state[,1:this$participant_t[8]]
+
 
