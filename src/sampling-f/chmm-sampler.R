@@ -79,7 +79,6 @@ chmm_sampling <- function(data_chmm,
   count <- 1
   
   # Start progress bar
-  
   progress <- txtProgressBar(min = 1, max = n_iterations, style = 3, 
                              width = 50, char = "=")
   
@@ -176,12 +175,12 @@ chmm_sampling <- function(data_chmm,
 # Test
 # 
 # this <- transform_data_chmm(
-#   directory_data = "data/csv-files/lewandowsky-2011-type6.csv",
-#   directory_features = "data/stimulus-features/lewandowsky-features.csv")
+#   directory_data = "data/csv-files/lee-navarro-2002-type4.csv",
+#   directory_features = "data/stimulus-features/lee-navarro-features.csv")
 # 
 # samples <- chmm_sampling(data_chmm = this,
-#               n_iterations = 2500,
-#               n_burn = 1500,
+#               n_iterations = 4000,
+#               n_burn = 2000,
 #               n_cores = 4,
 #               parameters_initial_values =
 #                 list("gamma" = 0.5,
@@ -193,13 +192,13 @@ chmm_sampling <- function(data_chmm,
 #                      "beta" = rgamma(n = dim(this$response)[3],
 #                                      shape = 2, rate = 1)),
 #               start_step_size = rep(0.0015, dim(this$response)[3]))
-# 
-# mean_states <- apply(X = samples$posterior_samples$hidden_states[,,8,],
+
+# mean_states <- apply(X = samples$posterior_samples$hidden_states[,,14,],
 #                      MARGIN = c(1,2), FUN = mean, na.rm =TRUE)
 # 
-# difference <- this$response[,1:this$participant_t[8],8] - mean_states[,1:this$participant_t[8]]
+# difference <- this$response[,1:this$participant_t[14],14] - mean_states[,1:this$participant_t[14]]
 # mode_state <- ifelse(test = mean_states > 0.5, yes = 1, no = 0)
 # 
 # difference <- this$response[,1:this$participant_t[8],8] - mode_state[,1:this$participant_t[8]]
-
-
+# 
+# 

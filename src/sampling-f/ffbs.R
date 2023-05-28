@@ -41,8 +41,6 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   conditional_predictive[, 1] <- c(1 - initial_probability,
                                    initial_probability)
   
-  print(c(inertia_category_a, inertia_category_b))
-  
   conditional_filtered_rest[, 1] <- 
     transition_others(state_now = states_rest[, 1],
                       state_after = states_rest[, 2],
@@ -59,8 +57,11 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
            conditional_filtered_rest[, 1]))
   
   for (t in 2:total_trials) {
-    relative_sim_others <- similarity_to_others %*%
-      (2 * states_rest[, (t - 1)] - 1)
+    relative_sim_others <- 
+      state_similarity(states_vec = states_rest[, (t - 1)],
+                       similarity_mat = similarity_to_others,
+                       method = "average")
+    print(relative_sim_others)
     
     prob_stay_a <- logit(x = inertia_category_a - relative_sim_others)
     prob_stay_b <- logit(x = inertia_category_b + relative_sim_others)
@@ -116,8 +117,10 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   
   for (t in (total_trials - 1):1) {
     
-    relative_sim_others <- similarity_to_others %*%
-      (2 * states_rest[, t] - 1)
+    relative_sim_others <- 
+      state_similarity(states_vec = states_rest[, t],
+                       similarity_mat = similarity_to_others, 
+                       method = "average")
     
     prob_stay_b <- logit(x = inertia_category_b + relative_sim_others)
     
@@ -159,15 +162,16 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
 # b <- distinctive_ln(stimulus_features = a)
 # d <- featural_distance(distinctive_features = b)
 # s <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
-# 
-# ff <- forward_backward(responses = rbinom(n = 5, size = 1, prob = 0.5), 
-#                  update_stimulus = 1, 
-#                  similarity = s,
-#                  n_states = 2,
-#                  unobserved_states = 
-#                    matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
-#                           ncol = 5, nrow = 9),
-#                  response_error = 0.1,
-#                  initial_probability = 0.2,
-#                  inertia_category_a = 1, 
-#                  inertia_category_b = 1)
+
+ff <- forward_backward(responses = rbinom(n = 5, size = 1, prob = 0.5),
+                       total_trials = 5,
+                 update_stimulus = 1,
+                 similarity = s,
+                 n_states = 2,
+                 unobserved_states =
+                   matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
+                          ncol = 5, nrow = 9),
+                 response_error = 0.1,
+                 initial_probability = 0.2,
+                 inertia_category_a = 1,
+                 inertia_category_b = 1)

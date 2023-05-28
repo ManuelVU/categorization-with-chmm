@@ -21,8 +21,11 @@ transition_others <- function(state_now, state_after, similarity, current_id,
   
   state_all[current_id, 1:2] <- c(0,1)
   
-  relative_similarity <-  cbind(similarity %*% (2 * state_all[, 1] - 1),
-                                similarity %*% (2 * state_all[, 2] - 1))
+  relative_similarity <-  cbind(
+    state_similarity(states_vec = state_all[, 1], similarity_mat = similarity,
+                    method = "average"),
+    state_similarity(states_vec = state_all[, 2], similarity_mat = similarity,
+                     method = "average"))
   
   for (i in 1:n_others) {
     if (state_now[i] == 0 & state_after[i] == 0) {
