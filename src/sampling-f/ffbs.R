@@ -61,7 +61,6 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
       state_similarity(states_vec = states_rest[, (t - 1)],
                        similarity_mat = similarity_to_others,
                        method = "average")
-    print(relative_sim_others)
     
     prob_stay_a <- logit(x = inertia_category_a - relative_sim_others)
     prob_stay_b <- logit(x = inertia_category_b + relative_sim_others)
