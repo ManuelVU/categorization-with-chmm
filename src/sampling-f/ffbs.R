@@ -163,15 +163,15 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
 # d <- featural_distance(distinctive_features = b)
 # s <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
 
-ff <- forward_backward(responses = rbinom(n = 5, size = 1, prob = 0.5),
-                       total_trials = 5,
-                 update_stimulus = 1,
-                 similarity = s,
-                 n_states = 2,
-                 unobserved_states =
-                   matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
-                          ncol = 5, nrow = 9),
-                 response_error = 0.1,
-                 initial_probability = 0.2,
-                 inertia_category_a = 1,
-                 inertia_category_b = 1)
+# ff <- forward_backward(responses = rbinom(n = 5, size = 1, prob = 0.5),
+#                        total_trials = 5,
+#                  update_stimulus = 1,
+#                  similarity = s,
+#                  n_states = 2,
+#                  unobserved_states =
+#                    matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
+#                           ncol = 5, nrow = 9),
+#                  response_error = 0.1,
+#                  initial_probability = 0.2,
+#                  inertia_category_a = 1,
+#                  inertia_category_b = 1)
