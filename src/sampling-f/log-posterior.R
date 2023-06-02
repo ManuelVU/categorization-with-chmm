@@ -24,8 +24,10 @@ log_posterior <- function(states, alpha_tilde, beta_tilde,
     
     for (t in 2:total_trials) {
       
-      relative_sim_others <- similarity_to_others %*%
-        (2 * states_rest[, (t - 1)] - 1)
+      relative_sim_others <- 
+        state_similarity(states_vec = states_rest[, (t - 1)],
+                         similarity_mat = similarity_to_others,
+                         method = "average")
       
       prob_stay_a <- logit(x = exp(alpha_tilde) - relative_sim_others)
       prob_stay_a <- max(0.0001, min(0.9999, prob_stay_a))

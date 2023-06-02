@@ -19,8 +19,10 @@ initial_states <- function(n_chains, n_trials, n_participants,
         
         similarity_to_others <- similarity[cc, ]
         
-        relative_sim_others <- similarity_to_others %*%
-          (2 * output[, (t - 1), p] - 1)
+        relative_sim_others <- 
+          state_similarity(states_vec = output[, (t - 1), p],
+                           similarity_mat = similarity_to_others, 
+                           method = "average")
         
         prob_stay_a <- logit(x = inertia_category_a[p] - relative_sim_others)
         prob_stay_b <- logit(x = inertia_category_b[p] + relative_sim_others)
