@@ -32,7 +32,7 @@ chmm_sampling <- function(data_chmm,
                                            stimulus_distinctive)
   stimulus_similarity <- similarity_ij(decay_rate = 1, decay_function = 1, 
                                        dissimilarity = stimulus_distance)
-
+  
   # Start sample vector for initial probability parameter and add initial 
   # value to position 1
   sample_gamma <- append(x = parameters_initial_values$gamma, 
@@ -87,23 +87,23 @@ chmm_sampling <- function(data_chmm,
     
     # Add to count position
     count <- count + 1
-  
+    
     # Update participants states in parallel
     st <- foreach(pp = 1:participants) %dopar% {
-        forward_backward_all(states_current =
-                               sample_states[, 1:trials_participant[pp], pp,
-                                             (sample - 1)],
-                             responses = responses[, 1:trials_participant[pp], pp],
-                             similarity = stimulus_similarity,
-                             n_states = 2,
-                             total_trials = trials_participant[pp],
-                             total_chains = stimulus,
-                             epsilon = sample_epsilon[(sample - 1), pp],
-                             gamma = sample_gamma[(sample - 1)],
-                             alpha = sample_alpha[(sample - 1), pp],
-                             beta = sample_beta[(sample - 1), pp])
+      forward_backward_all(states_current =
+                             sample_states[, 1:trials_participant[pp], pp,
+                                           (sample - 1)],
+                           responses = responses[, 1:trials_participant[pp], pp],
+                           similarity = stimulus_similarity,
+                           n_states = 2,
+                           total_trials = trials_participant[pp],
+                           total_chains = stimulus,
+                           epsilon = sample_epsilon[(sample - 1), pp],
+                           gamma = sample_gamma[(sample - 1)],
+                           alpha = sample_alpha[(sample - 1), pp],
+                           beta = sample_beta[(sample - 1), pp])
     }
-
+    
     # Move current updated state values to sample array
     for (pp in 1:participants) {
       sample_states[, 1:trials_participant[pp], pp, sample] <- st[[pp]]
@@ -137,10 +137,10 @@ chmm_sampling <- function(data_chmm,
       gamma_prior = c(1, 1))
     
     # Update epsilon parameter
-    sample_epsilon[sample, ] <- epsilon_update(
-      states_all = sample_states[, , , sample],
-      responses_all = responses,
-      epsilon_prior = c(10, 100))
+    # sample_epsilon[sample, ] <- epsilon_update(
+    #   states_all = sample_states[, , , sample],
+    #   responses_all = responses,
+    #   epsilon_prior = c(10, 100))
     
     # Update step size during burn in for Hamiltonian
     if ((sample %% 100) == 0 & (sample <= n_burn)) {
@@ -171,49 +171,19 @@ chmm_sampling <- function(data_chmm,
   return(output)
 }
 
-
-# Test
-# 
 # this <- transform_data_chmm(
 #   directory_data = "data/csv-files/lee-navarro-2002-type4.csv",
 #   directory_features = "data/stimulus-features/lee-navarro-features.csv")
-
-# stick_start <- rgamma(n = dim(this$response)[3],
-#                       shape = 2, rate = 1)
 # 
 # samples <- chmm_sampling(data_chmm = this,
-#                          n_iterations = 2500,
-#                          n_burn = 1500,
-#                          n_cores = 4,
-#                          parameters_initial_values =
-#                            list("gamma" = 0.5,
-#                                 "epsilon" = rbeta(n = dim(this$response)[3],
-#                                                   shape1 = 10,
-#                                                   shape2 = 100),
-#                                 "alpha" = stick_start,
-#                                 "beta" = stick_start),
-#                          start_step_size = rep(0.0015, dim(this$response)[3]))
-
-# samples <- chmm_sampling(data_chmm = this,
-#               n_iterations = 200,
-#               n_burn = 100,
+#               n_iterations = 1000,
+#               n_burn = 500,
 #               n_cores = 4,
 #               parameters_initial_values =
 #                 list("gamma" = 0.5,
-#                      "epsilon" = rbeta(n = dim(this$response)[3],
-#                                        shape1 = 10,
-#                                        shape2 = 100),
+#                      "epsilon" = 0.005,
 #                      "alpha" = rgamma(n = dim(this$response)[3],
 #                                       shape = 2, rate = 1),
 #                      "beta" = rgamma(n = dim(this$response)[3],
 #                                      shape = 2, rate = 1)),
 #               start_step_size = rep(0.0015, dim(this$response)[3]))
-# 
-# mean_states <- apply(X = samples$posterior_samples$hidden_states[,,1,],
-#                      MARGIN = c(1,2), FUN = mean, na.rm =TRUE)
-
-# difference <- this$response[,1:this$participant_t[14],14] - mean_states[,1:this$participant_t[14]]
-# mode_state <- ifelse(test = mean_states > 0.5, yes = 1, no = 0)
-
-# difference <- this$response[,1:this$participant_t[8],8] - mode_state[,1:this$participant_t[8]]
- 

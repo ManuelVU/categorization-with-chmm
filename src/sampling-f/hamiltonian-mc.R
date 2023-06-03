@@ -57,30 +57,32 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
   
   momentum <- -momentum
   
-  potential_current <- log_posterior(states = states, 
-                                      alpha_tilde = current_position[1],
-                                      beta_tilde = current_position[2],
-                                      alpha_prior = alpha_prior,
-                                      beta_prior = beta_prior,
-                                      similarity = similarity,
-                                      total_trials = total_trials,
-                                      n_stimulus = n_stimulus)
-  
-  potential_proposed <- log_posterior(states = states, 
-                                      alpha_tilde = position[1],
-                                      beta_tilde = position[2],
-                                      alpha_prior = alpha_prior,
-                                      beta_prior = beta_prior,
-                                      similarity = similarity,
-                                      total_trials = total_trials,
-                                      n_stimulus = n_stimulus)
+  kinetic_current <- sum(momentum_current^2) / 2
   
   kinetic_proposed <- sum(momentum^2) / 2
   
-  kinetic_current <- sum(momentum_current^2) / 2
+  potential_current <- kinetic_current - 
+    log_posterior(states = states, 
+                  alpha_tilde = current_position[1],
+                  beta_tilde = current_position[2],
+                  alpha_prior = alpha_prior,
+                  beta_prior = beta_prior,
+                  similarity = similarity,
+                  total_trials = total_trials,
+                  n_stimulus = n_stimulus) 
   
-  acceptance_probability <- exp(potential_current - potential_proposed +
-                                  kinetic_current - kinetic_proposed)
+  potential_proposed <- kinetic_proposed -
+    log_posterior(states = states, 
+                  alpha_tilde = position[1],
+                  beta_tilde = position[2],
+                  alpha_prior = alpha_prior,
+                  beta_prior = beta_prior,
+                  similarity = similarity,
+                  total_trials = total_trials,
+                  n_stimulus = n_stimulus)
+  
+  
+  acceptance_probability <- min(1, exp(potential_current - potential_proposed))
 
   ifelse(test = is.finite(exp(position[1])) & is.finite(exp(position[2])),
          yes = ifelse(test = runif(n = 1) < acceptance_probability, 
