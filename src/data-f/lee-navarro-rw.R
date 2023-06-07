@@ -38,12 +38,10 @@ lee_navarro_rw <- function(file_suffix,
     rs <- c(tmp$y1[i, 1:tt[1]], tmp$y2[i, 1:tt[2]], 
             tmp$y3[i, 1:tt[3]], tmp$y4[i, 1:tt[4]])
     
-    ct <- c(tmp$cs[tmp$stimindex1[i, 1:tt[1]],1], 
-            tmp$cs[tmp$stimindex2[i, 1:tt[2]],2],
-            tmp$cs[tmp$stimindex3[i, 1:tt[3]],3],
-            tmp$cs[tmp$stimindex4[i, 1:tt[4]],4])
+    crr <- c(tmp$correct1[i, 1:tt[1]], tmp$correct2[i, 1:tt[2]], 
+             tmp$correct3[i, 1:tt[3]], tmp$correct4[i, 1:tt[4]])
     
-    id <-  append(x = id, values = rep(x = i, times = sum(tt)))
+    id <- append(x = id, values = rep(x = i, times = sum(tt)))
     
     trial <- append(x = trial, values = seq(1, sum(tt)))
     
@@ -61,13 +59,18 @@ lee_navarro_rw <- function(file_suffix,
     
     response_char <- append(x = response_char, values = cats[rs + 1])
     
-    category <- append(x = category, values = ct - 1)
+    correct <- append(x = correct, values = crr)
     
-    category_char <- append(x = category_char, values = cats[ct])
+    category <- append(x = category, 
+                       values = ifelse(test = correct == 1, 
+                                       yes = rs, 
+                                       no = 1 - rs))
     
-    correct <- append(x = correct, 
-                      values = ifelse(test = rs == (ct - 1), 
-                                      yes = TRUE, no = FALSE))
+    category_char <- append(x = category_char, 
+                            values = ifelse(test = correct == 1, 
+                                            yes = cats[rs + 1], 
+                                            no = cats[1 - rs + 1]))
+    
   }
   
   out_tmp <- dplyr::tibble(id, trial, condition, trial_condition,
