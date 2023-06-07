@@ -62,12 +62,12 @@ lee_navarro_rw <- function(file_suffix,
     correct <- append(x = correct, values = crr)
     
     category <- append(x = category, 
-                       values = ifelse(test = correct == 1, 
+                       values = ifelse(test = crr == 1, 
                                        yes = rs, 
                                        no = 1 - rs))
     
     category_char <- append(x = category_char, 
-                            values = ifelse(test = correct == 1, 
+                            values = ifelse(test = crr == 1, 
                                             yes = cats[rs + 1], 
                                             no = cats[1 - rs + 1]))
     
