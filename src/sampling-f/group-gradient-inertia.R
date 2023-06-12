@@ -80,13 +80,13 @@ gradient_inertia_group <- function(states,
   return(gradient)
 }
 
-a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
-b <- distinctive_ln(stimulus_features = a)
-d <- featural_distance(distinctive_features = b)
-k <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
-# 
-gradient_inertia_group(alpha_tilde = 2, beta_tilde = 1,
-                       states = array(matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
-                                 ncol = 5, nrow = 9),dim = c(9,5,3)),
-                        total_trials = rep(5,9), n_stimulus = 9, similarity = k,
-                        alpha_prior = c(2, 1), beta_prior = c(2, 1))
+# a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
+# b <- distinctive_ln(stimulus_features = a)
+# d <- featural_distance(distinctive_features = b)
+# k <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
+#
+# gradient_inertia_group(alpha_tilde = 2, beta_tilde = 1,
+#                        states = array(matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
+#                                  ncol = 5, nrow = 9),dim = c(9,5,3)),
+#                         total_trials = rep(5,9), n_stimulus = 9, similarity = k,
+#                         alpha_prior = c(2, 1), beta_prior = c(2, 1))

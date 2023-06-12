@@ -89,21 +89,21 @@ hamiltonian_mc_group <- function(states, total_trials,
   
 }
 
-a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
-b <- distinctive_ln(stimulus_features = a)
-d <- featural_distance(distinctive_features = b)
-sm <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
+# a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
+# b <- distinctive_ln(stimulus_features = a)
+# d <- featural_distance(distinctive_features = b)
+# sm <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
 # 
-st <- array(rbinom(n = 9 * 5 * 10, size = 1, prob = 0.5),
-       dim = c(9,5,10))
+# st <- array(rbinom(n = 9 * 5 * 10, size = 1, prob = 0.5),
+#        dim = c(9,5,10))
 # 
 # lp <- log_posterior(alpha_tilde = 1, beta_tilde = 2,
 #               states = st,
 #               total_trials = 5, n_stimulus = 9, similarity = sm,
 #               alpha_prior = c(1, 1), beta_prior = c(1, 1))
 # 
-hamiltonian_mc_group(states = st, total_trials = rep(5,10), 
-                     alpha_tilde = 1, beta_tilde = 2,
-               alpha_prior = c(2, 1), beta_prior = c(2, 1),
-               similarity = sm, leap_size = 0.3, leap = 30)
+# hamiltonian_mc_group(states = st, total_trials = rep(5,10), 
+#                      alpha_tilde = 1, beta_tilde = 2,
+#                alpha_prior = c(2, 1), beta_prior = c(2, 1),
+#                similarity = sm, leap_size = 0.3, leap = 30)
 

@@ -162,22 +162,22 @@ chmm_sampling_group <- function(data_chmm,
   return(output)
 }
 
-this <- transform_data_chmm(
-  directory_data = "data/csv-files/lee-navarro-2002-type4.csv",
-  directory_features = "data/stimulus-features/lee-navarro-features.csv")
-
-samples <- chmm_sampling_group(
-  data_chmm = this,
-  n_iterations = 20,
-  n_burn = 1,
-  n_cores = 4,
-  parameters_initial_values =
-  list("gamma" = 0.5,
-       "epsilon" = rbeta(n = dim(this$response)[3],
-                         shape1 = 10,
-                         shape2 = 100),
-       "alpha" = rgamma(n = 1,shape = 2,rate = 1),
-       "beta" = rgamma(n = 2, shape = 2, rate = 1)),
-       start_step_size = 0.001)
+# this <- transform_data_chmm(
+#   directory_data = "data/csv-files/lee-navarro-2002-type4.csv",
+#   directory_features = "data/stimulus-features/lee-navarro-features.csv")
+# 
+# samples <- chmm_sampling_group(
+#   data_chmm = this,
+#   n_iterations = 20,
+#   n_burn = 1,
+#   n_cores = 4,
+#   parameters_initial_values =
+#   list("gamma" = 0.5,
+#        "epsilon" = rbeta(n = dim(this$response)[3],
+#                          shape1 = 10,
+#                          shape2 = 100),
+#        "alpha" = rgamma(n = 1,shape = 2,rate = 1),
+#        "beta" = rgamma(n = 2, shape = 2, rate = 1)),
+#        start_step_size = 0.001)
 
 
