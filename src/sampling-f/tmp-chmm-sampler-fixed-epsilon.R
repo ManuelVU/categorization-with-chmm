@@ -1,6 +1,6 @@
 # CHMM of categorization sampling algorithm
 
-chmm_sampling <- function(data_chmm,
+chmm_sampling_fixed_epsilon <- function(data_chmm,
                           n_iterations, n_burn, n_cores,
                           parameters_initial_values,
                           start_step_size) {

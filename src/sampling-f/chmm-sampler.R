@@ -3,7 +3,8 @@
 chmm_sampling <- function(data_chmm,
                           n_iterations, n_burn, n_cores,
                           parameters_initial_values,
-                          start_step_size) {
+                          start_step_size, hmc_acceptance, 
+                          prior_parameters) {
   
   # Load library for parallel computing and register cores
   library(doParallel)
@@ -115,7 +116,10 @@ chmm_sampling <- function(data_chmm,
                                             sample],
                      alpha_tilde = log(sample_alpha[(sample - 1), pp]),
                      beta_tilde = log(sample_beta[(sample - 1), pp]),
-                     alpha_prior = c(2, 1), beta_prior = c(2, 1),
+                     alpha_prior = c(prior_parameters$alpha[1], 
+                                     prior_parameters$alpha[2]), 
+                     beta_prior = c(prior_parameters$beta[1],
+                                    prior_parameters$beta[2]),
                      similarity = stimulus_similarity,
                      leap = n_leaps, 
                      leap_size = step_size[pp])
@@ -134,20 +138,22 @@ chmm_sampling <- function(data_chmm,
     # Update gamma parameter
     sample_gamma[sample] <- gamma_update(
       initial_states = sample_states[, 1, , sample],
-      gamma_prior = c(1, 1))
+      gamma_prior = c(prior_parameters$gamma[1],
+                      prior_parameters$gamma[2]))
     
     # Update epsilon parameter
     sample_epsilon[sample, ] <- epsilon_update(
       states_all = sample_states[, , , sample],
       responses_all = responses,
-      epsilon_prior = c(10, 100))
+      epsilon_prior = c(prior_parameters$epsilon[1],
+                        prior_parameters$epsilon[2]))
     
     # Update step size during burn in for Hamiltonian
     if ((sample %% 100) == 0 & (sample <= n_burn)) {
       step_size <- adjust_step(step_size = step_size, 
                                acceptance_prob = 
                                  rowMeans(x = acc, na.rm = TRUE),
-                               target_acceptance = 0.7)
+                               target_acceptance = hmc_acceptance)
       count <- 0
     }
     
