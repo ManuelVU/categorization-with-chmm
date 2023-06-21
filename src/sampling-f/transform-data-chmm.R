@@ -34,7 +34,7 @@ transform_data_chmm <- function(directory_data, directory_features) {
 
       for (tt in 1:trial_participant[count]) {
 
-        response_output[b$stimulus[tt], tt, pp] <- b$response[tt]
+        response_output[b$stimulus[tt], tt, count] <- b$response[tt]
 
       }
     }
