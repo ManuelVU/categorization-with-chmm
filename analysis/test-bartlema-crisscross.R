@@ -11,7 +11,7 @@ bartlema <- transform_data_chmm(
 # Start constants used by the sampler
 iterations <- 1000
 burn <- 500
-acceptance_target <- 0.4
+acceptance_target <- 0.8
 cores <- as.integer(round(x = parallel::detectCores() / 2, digits = 0))
 
 prior_values <- list("gamma" = c(1, 1),
