@@ -33,8 +33,11 @@ transform_data_chmm <- function(directory_data, directory_features) {
                                   values = max(b$trial_condition))
 
       for (tt in 1:trial_participant[count]) {
+        
+        row_index <- b$stimulus[which(b$trial_condition == tt)]
+        tt_index <- which(b$trial_condition == tt)
 
-        response_output[b$stimulus[tt], tt, count] <- b$response[tt]
+        response_output[row_index, tt, count] <- b$response[tt_index]
 
       }
     }
