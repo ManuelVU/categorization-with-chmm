@@ -9,8 +9,8 @@ bartlema <- transform_data_chmm(
   directory_features = "data/stimulus-features/bartlema-CrissCross-features.csv")
 
 # Start constants used by the sampler
-iterations <- 1000
-burn <- 500
+iterations <- 10000
+burn <- 5000
 acceptance_target <- 0.8
 cores <- as.integer(round(x = parallel::detectCores() / 2, digits = 0))
 
