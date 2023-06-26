@@ -5,7 +5,7 @@ lee_navarro <- transform_data_chmm(
 
 samples <- readRDS(file = "analysis/posterior-samples/lee-navarro-2002-type4-posterior-samples.rds")
 
-category_colors <- c("#70c2c1", "#fd9713")
+category_colors <- c("#EDC2D8FF", "#8ABAD3FF")
 
 coherence_colors <- cbind(rep(x = "white", times = 2),
                           category_colors)

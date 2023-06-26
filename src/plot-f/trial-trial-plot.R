@@ -1,0 +1,89 @@
+# Plotting function for trial by trial responses single participant
+
+trial_trial_participant <- function (data, posteriors, participant_id,
+                                     posterior_add = FALSE, 
+                                     stimulus_plot,
+                                     category_color, border_color,
+                                     width = 0.8, 
+                                     height = 0.8, 
+                                     shade_stimulus = FALSE, 
+                                     region = c(0.05,0.05,0.05,1), 
+                                     color_shade = "#9FB1BC55", 
+                                     posterior_margin = 0.08) {
+  
+  n_trials <- data$participant_t[participant_id]
+  
+  if (missing(stimulus_plot)) {
+    responses <- data$response[, 1:n_trials, participant_id]
+    
+  }
+  else {
+    responses <- data$responses[stimulus_plot, 1:n_trials, participant_id]
+  }
+  
+  n_stimulus <- dim(responses)[1]
+  
+  if (posterior_add == TRUE) {
+    if (!missing(posteriors)) {
+      states_tmp <- 
+        posteriors$posterior_samples$hidden_states[, ,participant_id, ]
+      
+      states_tmp <- states_tmp[, 1:n_trials, ]
+    }
+  }
+  
+  plot(x = 0, y = 0, type = "n", ann = FALSE, axes = FALSE, 
+       xlim = c(0, n_trials + 1), ylim = c(0,n_stimulus + height))
+  # if (shade_stimulus == TRUE) {
+  #   for (i in 2:n_stimulus) {
+  #     if(i %% 2 == 0){
+  #       rect(xleft = - (width / 2 + region[2]), 
+  #            ybottom = i - 1 + height / 2 + region[1],
+  #            xright = n_trials + width / 2 + region[4],
+  #            ytop = i + height / 2 + region[3], border = FALSE, 
+  #            col = color_shade)
+  #     }
+  #   }
+  # }
+  if (shade_stimulus == TRUE) {
+    for (i in 1:n_stimulus) {
+        rect(xleft = - (width / 2 + region[2]), 
+             ybottom = i - 1 + height / 2 + region[1],
+             xright = n_trials + width / 2 + region[4],
+             ytop = i - height / 2 - region[3], border = FALSE, 
+             col = color_shade)
+    }
+  }
+  
+  for(tt in 1:n_trials) {
+    rect(xleft = tt - width / 2, 
+         ybottom = which(!is.na(responses[, tt])) - height / 2,
+         xright = tt + width / 2, 
+         ytop = which(!is.na(responses[, tt])) + height / 2,
+         border = border_color,
+         col = 
+           category_color[responses[which(!is.na(responses[, tt])), tt] + 1])
+  }
+  
+  if (posterior_add == TRUE) {
+    states_mean <- apply(X = states_tmp, MARGIN = c(1, 2), FUN = mean)
+    a <- 0:(n_stimulus - 1) + height / 2 + posterior_margin
+    b <- 1:n_stimulus - height / 2 - posterior_margin
+    mid <- a + (b - a) / 2
+    
+    
+    for(tt in 1:n_trials) {
+      segments(x0 = rep(x = tt, times = n_stimulus),
+               x1 = rep(x = tt, times = n_stimulus),
+               y0 = ifelse(test = states_mean[, tt] > 0.5, 
+                           yes = mid, 
+                           no = a + states_mean[, tt] * (b - a)),
+               y1 = ifelse(test = states_mean[, tt] > 0.5, 
+                           yes = a + states_mean[, tt] * (b - a), 
+                           no = mid), 
+               lwd = 1.5, 
+               col = category_color[round(states_mean[, tt]) + 1])
+    }
+    abline(h = mid, col = border_color, lwd = 1.3)
+  }
+}
