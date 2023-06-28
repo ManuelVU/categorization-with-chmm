@@ -9,7 +9,7 @@ trial_trial_participant <- function (data, posteriors, participant_id,
                                      shade_stimulus = FALSE, 
                                      region = c(0.05,0.05,0.05,1), 
                                      color_shade = "#9FB1BC55", 
-                                     posterior_margin = 0.08) {
+                                     posterior_margin = 0.08, lwd_rect = 0.1) {
   
   n_trials <- data$participant_t[participant_id]
   
@@ -68,7 +68,8 @@ trial_trial_participant <- function (data, posteriors, participant_id,
            ytop = which(!is.na(responses[, tt])) + height / 2,
            border = border_color,
            col = 
-             category_color[responses[which(!is.na(responses[, tt])), tt] + 1])
+             category_color[responses[which(!is.na(responses[, tt])), tt] + 1],
+           lwd = lwd_rect)
     }  
   }
   
@@ -91,7 +92,7 @@ trial_trial_participant <- function (data, posteriors, participant_id,
                lwd = 1.5, 
                col = category_color[round(states_mean[, tt]) + 1])
     }
-    abline(h = mid, col = border_color, lwd = 1.3)
+    abline(h = mid, col = border_color, lwd = 1.83)
   }
 }
 
