@@ -9,8 +9,8 @@ lee_navarro <- transform_data_chmm(
   directory_features = "data/stimulus-features/lee-navarro-features.csv")
 
 # Start constants used by the sampler
-iterations <- 10000
-burn <- 5000
+iterations <- 20000
+burn <- 15000
 acceptance_target <- 0.8
 cores <- as.integer(round(x = parallel::detectCores() / 2, digits = 0))
 
@@ -19,14 +19,23 @@ prior_values <- list("gamma" = c(1, 1),
                      "alpha" = c(2, 1), 
                      "beta" = c(2, 1))
 
+# initial_values <- list("gamma" = 0.5,
+#                        "epsilon" = rbeta(n = dim(lee_navarro$response)[3],
+#                                          shape1 = 10,
+#                                          shape2 = 100),
+#                        "alpha" = rgamma(n = dim(lee_navarro$response)[3],
+#                                         shape = 2, rate = 1),
+#                        "beta" = rgamma(n = dim(lee_navarro$response)[3],
+#                                        shape = 2, rate = 1))
+
 initial_values <- list("gamma" = 0.5,
                        "epsilon" = rbeta(n = dim(lee_navarro$response)[3],
                                          shape1 = 10,
                                          shape2 = 100),
-                       "alpha" = rgamma(n = dim(lee_navarro$response)[3],
-                                        shape = 2, rate = 1),
-                       "beta" = rgamma(n = dim(lee_navarro$response)[3],
-                                       shape = 2, rate = 1))
+                       "alpha" = rep(x = 5, 
+                                     times = dim(lee_navarro$response)[3]),
+                       "beta" = rep(x = 5, 
+                                    times = dim(lee_navarro$response)[3]))
 
 step_size_starting <- rep(0.003, dim(lee_navarro$response)[3])
 
@@ -42,4 +51,4 @@ samples <- chmm_sampling(data_chmm = lee_navarro,
 
 # Save posterior samples
 saveRDS(object = samples, 
-        file = "analysis/posterior-samples/lee-navarro-2002-type4-posterior-samples.rds")
+        file = "data/posterior-samples/lee-navarro-2002-type4-posterior-samples-2.rds")
