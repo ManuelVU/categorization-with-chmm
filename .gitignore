@@ -39,6 +39,4 @@ vignettes/*.pdf
 .Renviron
 
 # Ignore large posterior samples file
-data/posterior-samples/bartlema-crisscross-posterior-samples.rds
-data/posterior-samples/lee-navarro-2002-type4-posterior-samples.rds
-data/posterior-samples/lee-navarro-2002-type4-posterior-samples-2.rds
+data/posterior-samples/
