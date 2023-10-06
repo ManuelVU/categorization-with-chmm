@@ -27,6 +27,6 @@ for (p in participants_keep){
                          max(lee_navarro$trial_condition[lee_navarro$id == p]))
   
   mode_y[count, 1:max(lee_navarro$trial_condition[lee_navarro$id == p])] <- 
-    round(colMeans(y_hat_tmp),0)
+    colMeans(y_hat_tmp)
     
 }

@@ -70,12 +70,20 @@ par(oma = c(1.6,2.1,0.1,0.1),
     mai = c(0.1,0.1,0.1,0.1),
     xaxs = "i", yaxs = "i")
 
+lee_navarro <- transform_data_chmm(
+  directory_data = "data/csv-files/lee-navarro-2002-type4.csv",
+  directory_features = "data/stimulus-features/lee-navarro-features.csv")
+
+samples <- readRDS(file = "data/posterior-samples/lee-navarro-2002-type4-posterior-samples-2.rds")
+
+source(file = "src/plot-f/trial-trial-plot.R")
+
 pp <- 3
 
 trial_trial_participant(data = lee_navarro, posterior_add = TRUE, 
                         posteriors = samples,
                       participant_id = pp, width = 0.7, height = 0.23,
-                        category_color = c("#D81159", "#234E70"),
+                        category_color = c("#30626d", "#723f75"),
                         border_color = "#FCF6F5FF", shade_stimulus = TRUE)
 box(bty = "l")
 axis(1, at = c(1, seq(10,lee_navarro$participant_t[pp], 10)), padj = -1.3, tck = -0.02)

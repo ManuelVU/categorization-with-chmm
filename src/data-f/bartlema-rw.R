@@ -1,8 +1,11 @@
 # Function that reads and writes data from one or more of the conditions in
 # Bartlema, et al (2014) file is whiten in long-format as a .csv. There are 
-# two designs with names Diagonal and CrissCross which can be read and written
+# two designs with names Diagonal and Criss-cross which can be read and written
 # into the directory ~/data/csv-files directory. 
-bartlema_rw <- function (design = "Diagonal", add_transfer = TRUE) {
+bartlema_rw <- function (design = "Diagonal", 
+                         add_transfer = TRUE, 
+                         participants_keep = c(1:31),
+                         file_suffix = "") {
   path <- paste(c("data/matlab-files/bartlema", design, ".mat"), collapse = "")
   
   x <- R.matlab::readMat(con = path)
@@ -57,9 +60,14 @@ bartlema_rw <- function (design = "Diagonal", add_transfer = TRUE) {
       "category_char" = category_names[x$d[,,1]$truth],
       "correct" = x$d[,,1]$correct[,1])
     
+    if (length(participants_keep) < 31) {
+      otput <- subset(x = output, subset = id %in% participants_keep)
+    }
+    
     readr::write_csv(x = output, 
                      file = paste(c("data/csv-files/bartlema-", 
-                                    design, ".csv"), collapse = ""))
+                                    design, "-", file_suffix, ".csv"), 
+                                  collapse = ""))
     
   } else if (add_transfer == FALSE) {
     output <- dplyr::tibble(
@@ -77,9 +85,14 @@ bartlema_rw <- function (design = "Diagonal", add_transfer = TRUE) {
       "correct" = x$d[,,1]$correct[,1]) |>
       subset(subset = condition == 1)
     
+    if (length(participants_keep) < 31) {
+      otput <- subset(x = output, subset = id %in% participants_keep)
+    }
+    
     readr::write_csv(x = output, 
                      file = paste(c("data/csv-files/bartlema-", 
-                                    design, "-notransfer.csv"), collapse = ""))
+                                    design, "-",file_suffix, "-notransfer.csv"), 
+                                  collapse = ""))
     
   }
 }
