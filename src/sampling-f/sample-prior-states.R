@@ -12,7 +12,7 @@ initial_states <- function(n_chains, n_trials, n_participants,
   for (p in 1:n_participants){
    
     output[, 1, p] <- rbinom(n = n_chains, size = 1, 
-                             prob = initial_state_probability)
+                             prob = initial_state_probability[p])
    
     for (t in 2:n_trials[p]) {
       for (cc in 1:n_chains) {

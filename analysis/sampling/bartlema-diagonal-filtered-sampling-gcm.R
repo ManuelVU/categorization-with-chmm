@@ -4,8 +4,9 @@ library(R2jags)
 
 source(file = "src/sampling-f/transform-data-gcm.R")
 
-jags_data <- transform_gcm(data_path = "data/csv-files/bartlema-diagonal.csv", 
-              features_path = "data/stimulus-features/bartlema-Diagonal-features.csv")
+jags_data <- transform_gcm(
+  data_path = "data/csv-files/bartlema-diagonal-filtered.csv", 
+  features_path = "data/stimulus-features/bartlema-Diagonal-features.csv")
 
 gcm_model <- "
 data{

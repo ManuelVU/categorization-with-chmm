@@ -76,6 +76,7 @@ lee_navarro_rw <- function(file_suffix,
   out_tmp <- dplyr::tibble(id, trial, condition, trial_condition,
                            stimulus, stimulus_char, response, response_char, 
                            category, category_char, correct)
+  
   if(length(conditions_keep) < 4){
     out_tmp <- subset(x = out_tmp, 
                       subset = out_tmp$condition %in% conditions_keep)

@@ -40,13 +40,12 @@ chmm_sampling <- function(data_chmm, metric = "distinctive", order_p = 1,
   stimulus_similarity <- similarity_ij(decay_rate = 1, decay_function = 1, 
                                        dissimilarity = stimulus_distance)
   
-  # Start sample vector for initial probability parameter and add initial 
-  # value to position 1
-  sample_gamma <- append(x = parameters_initial_values$gamma, 
-                         values = rep(x = NA, times = n_iterations - 1))
-  
   # Start sample matrix for individual model parameters and add initial value 
   # to row one
+  sample_gamma <- matrix(data = parameters_initial_values$gamma,
+                         byrow = TRUE, 
+                         ncol = participants, 
+                         nrow = n_iterations)
   sample_epsilon <- matrix(data = parameters_initial_values$epsilon, 
                            byrow = TRUE, 
                            ncol = participants, 
@@ -66,7 +65,7 @@ chmm_sampling <- function(data_chmm, metric = "distinctive", order_p = 1,
     n_trials = trials_participant,
     n_participants = participants, 
     similarity = stimulus_similarity,
-    initial_state_probability = sample_gamma[1],
+    initial_state_probability = sample_gamma[1,],
     inertia_category_a = sample_alpha[1,],
     inertia_category_b = sample_beta[1,])
   
@@ -106,7 +105,7 @@ chmm_sampling <- function(data_chmm, metric = "distinctive", order_p = 1,
                            total_trials = trials_participant[pp],
                            total_chains = stimulus,
                            epsilon = sample_epsilon[(sample - 1), pp],
-                           gamma = sample_gamma[(sample - 1)],
+                           gamma = sample_gamma[(sample - 1), pp],
                            alpha = sample_alpha[(sample - 1), pp],
                            beta = sample_beta[(sample - 1), pp])
     }
@@ -142,7 +141,7 @@ chmm_sampling <- function(data_chmm, metric = "distinctive", order_p = 1,
     }
     
     # Update gamma parameter
-    sample_gamma[sample] <- gamma_update(
+    sample_gamma[sample, ] <- gamma_update(
       initial_states = sample_states[, 1, , sample],
       gamma_prior = c(prior_parameters$gamma[1],
                       prior_parameters$gamma[2]))
@@ -169,7 +168,7 @@ chmm_sampling <- function(data_chmm, metric = "distinctive", order_p = 1,
   
   # Setup output
   output <- list("posterior_samples" = 
-                   list("gamma" = sample_gamma[(n_burn + 1):n_iterations],
+                   list("gamma" = sample_gamma[(n_burn + 1):n_iterations, ],
                         "epsilon" = sample_epsilon[(n_burn + 1):n_iterations, ],
                         "alpha" = sample_alpha[(n_burn + 1):n_iterations, ],
                         "beta" = sample_beta[(n_burn + 1):n_iterations, ],

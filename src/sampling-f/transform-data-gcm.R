@@ -28,7 +28,8 @@ transform_gcm <- function (data_path, features_path, transfer_id) {
   
   output$features <- features[, 3:4]
   
-  output$n_trials <- unname(obj = table(data$stimulus[which(data$id == 1)]))
+  output$n_trials <- unname(
+    obj = table(data$stimulus[which(data$id == unique(data$id)[1])]))
   
   if (!missing(transfer_id)) {
     if (transfer_id == 1) {
@@ -44,7 +45,8 @@ transform_gcm <- function (data_path, features_path, transfer_id) {
   for (i in 1:output$n_participants) {
     for(j in 1:output$n_stimulus)
     output$y[i, j] <- sum(
-      subset(x = data, subset = id == i & stimulus == j)$response_char == "A")
+      subset(x = data, 
+             subset = id == unique(data$id)[i] & stimulus == j)$response_char == "A")
   }
   
   return(output)

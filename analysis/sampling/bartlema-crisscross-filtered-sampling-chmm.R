@@ -5,7 +5,7 @@ source(file = "analysis/load-functions.R")
 
 # Generate the data needed for the sampler using Lee and Navarro's data set
 bartlema <- transform_data_chmm(
-  directory_data = "data/csv-files/bartlema-crisscross.csv",
+  directory_data = "data/csv-files/bartlema-crisscross-filtered.csv",
   directory_features = "data/stimulus-features/bartlema-CrissCross-features.csv")
 
 # Start constants used by the sampler
@@ -19,14 +19,15 @@ prior_values <- list("gamma" = c(1, 1),
                      "alpha" = c(2, 1), 
                      "beta" = c(2, 1))
 
-initial_values <- list("gamma" = 0.5,
-                       "epsilon" = rbeta(n = dim(bartlema$response)[3],
+initial_values <- list("gamma" = rep(x = 0.5, 
+                                     times = dim(lee_navarro$response)[3]),
+                       "epsilon" = rbeta(n = dim(lee_navarro$response)[3],
                                          shape1 = 10,
                                          shape2 = 100),
-                       "alpha" = rgamma(n = dim(bartlema$response)[3],
-                                        shape = 2, rate = 1),
-                       "beta" = rgamma(n = dim(bartlema$response)[3],
-                                       shape = 2, rate = 1))
+                       "alpha" = rep(x = 5, 
+                                     times = dim(lee_navarro$response)[3]),
+                       "beta" = rep(x = 5, 
+                                    times = dim(lee_navarro$response)[3]))
 
 step_size_starting <- rep(0.0015, dim(bartlema$response)[3])
 
@@ -44,4 +45,4 @@ samples <- chmm_sampling(data_chmm = bartlema,
 
 # Save posterior samples
 saveRDS(object = samples, 
-        file = "analysis/posterior-samples/bartlema-crisscross-posterior-samples.rds")
+        file = "data/posterior-samples/bartlema-crisscross-posterior-samples.rds")

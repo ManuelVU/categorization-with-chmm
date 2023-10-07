@@ -61,7 +61,7 @@ bartlema_rw <- function (design = "Diagonal",
       "correct" = x$d[,,1]$correct[,1])
     
     if (length(participants_keep) < 31) {
-      otput <- subset(x = output, subset = id %in% participants_keep)
+      output <- subset(x = output, subset = id %in% participants_keep)
     }
     
     readr::write_csv(x = output, 
@@ -86,7 +86,7 @@ bartlema_rw <- function (design = "Diagonal",
       subset(subset = condition == 1)
     
     if (length(participants_keep) < 31) {
-      otput <- subset(x = output, subset = id %in% participants_keep)
+      output <- subset(x = output, subset = id %in% participants_keep)
     }
     
     readr::write_csv(x = output, 
