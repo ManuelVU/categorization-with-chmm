@@ -4,13 +4,13 @@
 source(file = "analysis/load-functions.R")
 
 # Generate the data needed for the sampler using Lee and Navarro's data set
-bartlema <- transform_data_chmm(
-  directory_data = "data/csv-files/bartlema-diagonal-filtered.csv",
-  directory_features = "data/stimulus-features/bartlema-Diagonal-features.csv")
+lee_navarro <- transform_data_chmm(
+  directory_data = "data/csv-files/lee-navarro-2002-type4-filtered.csv",
+  directory_features = "data/stimulus-features/lee-navarro-features.csv")
 
 # Start constants used by the sampler
-iterations <- 10000
-burn <- 5000
+iterations <- 15000
+burn <- 10000
 acceptance_target <- 0.8
 cores <- as.integer(round(x = parallel::detectCores() / 2, digits = 0))
 
@@ -29,20 +29,18 @@ initial_values <- list("gamma" = rep(x = 0.5,
                        "beta" = rep(x = 5, 
                                     times = dim(lee_navarro$response)[3]))
 
-step_size_starting <- rep(0.0015, dim(bartlema$response)[3])
+step_size_starting <- rep(0.003, dim(lee_navarro$response)[3])
 
 # Start sampling using chmm_sampler
-samples <- chmm_sampling(data_chmm = bartlema,
-                         metric = "minkowski",
-                         order_p = 1,
-                         n_iterations = iterations,
-                         n_burn = burn,
-                         n_cores = cores,
-                         parameters_initial_values = initial_values,
-                         prior_parameters = prior_values,
-                         start_step_size = step_size_starting, 
-                         hmc_acceptance = acceptance_target)
+samples <- chmm_sampling(data_chmm = lee_navarro,
+              n_iterations = iterations,
+              n_burn = burn,
+              n_cores = cores,
+              parameters_initial_values = initial_values,
+              prior_parameters = prior_values,
+              start_step_size = step_size_starting, 
+              hmc_acceptance = acceptance_target)
 
 # Save posterior samples
 saveRDS(object = samples, 
-        file = "data/posterior-samples/bartlema-diagonal-posterior-samples.rds")
+        file = "data/posterior-samples/model-parameters/lee-navarro-type4-posterior-samples.rds")

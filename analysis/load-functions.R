@@ -7,6 +7,8 @@ files_sources <- cbind(rep(x = prefix, times = length(files_sources)),
                        files_sources) |> 
   apply(MARGIN = 1, FUN = paste, collapse = "")
 
+files_sources <- files_sources[stringr::str_detect(string = files_sources, pattern = ".R")]
+
 sapply(files_sources, source)
 
 # load all sampling functions from sampling-f path

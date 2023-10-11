@@ -34,7 +34,8 @@ model{
       response_b[i, j] = inprod(s[i, j, ], belong_b)
       
       theta[i, j] = beta[i] * response_a[i, j] / 
-        (beta[i] * response_a[i, j] + (1 - beta[i]) * response_b[i, j])
+                   (beta[i] * response_a[i, j] + 
+                   (1 - beta[i]) * response_b[i, j])
         
       y[i, j] ~ dbin(theta[i, j], n_trials[j])
     }
@@ -45,9 +46,9 @@ gcm_parameters <- c("omega", "beta", "lambda", "theta")
 
 gcm_samples <- jags(data = jags_data, parameters.to.save = gcm_parameters,
                     model.file = textConnection(gcm_model), n.chains = 5, 
-                    n.iter = 10000, n.burnin = 9000, n.thin = 1)
+                    n.iter = 20000, n.burnin = 19000, n.thin = 1)
 
-theta <- gcm_samples$BUGSoutput$sims.list$theta
-
-saveRDS(object = theta, 
-        file = "data/posterior-samples/bartlema-crisscross-gcm-posterior-samples.rds")
+saveRDS(object = gcm_samples, 
+        file = paste(c("data/posterior-samples/model-parameters/",
+                       "bartlema-crisscross-filtered-gcm.rds"),
+                     collapse = ""))
