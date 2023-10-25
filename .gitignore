@@ -39,22 +39,25 @@ vignettes/*.pdf
 .Renviron
 
 # Ignore large posterior samples files
-data/posterior-samples/model-parameters/bartlema-crisscross-filtered-gcm.rds
-data/posterior-samples/model-parameters/bartlema-crisscross-filtered-chmm.rds
 data/posterior-samples/model-parameters/bartlema-diagonal-filtered-gcm.rds
 data/posterior-samples/model-parameters/bartlema-diagonal-filtered-chmm.rds
 data/posterior-samples/model-parameters/lee-navarro-type4-filtered-chmm.rds
 
+data/posterior-samples/model-parameters/bartlema-diagonal-filtered-transfer1-chmm.rds
+data/posterior-samples/model-parameters/bartlema-diagonal-filtered-transfer3-chmm.rds
+data/posterior-samples/model-parameters/bartlema-diagonal-filtered-transfer5-chmm.rds
+data/posterior-samples/model-parameters/bartlema-diagonal-filtered-transfer7-chmm.rds
+
+data/posterior-samples/model-parameters/bartlema-diagonal-filtered-transfer1-gcm.rds
+data/posterior-samples/model-parameters/bartlema-diagonal-filtered-transfer3-gcm.rds
+data/posterior-samples/model-parameters/bartlema-diagonal-filtered-transfer5-gcm.rds
+data/posterior-samples/model-parameters/bartlema-diagonal-filtered-transfer7-gcm.rds
+
 # Ignore posterior adequacy samples
-data/posterior-samples/posterior-adequacy/bartlema-crisscross-filtered-chmm.rds
 data/posterior-samples/posterior-adequacy/bartlema-diagonal-filtered-chmm.rds
 data/posterior-samples/posterior-adequacy/lee-navarro-type4-filtered-chmm.rds
 
 # Ignore posterior predictive distribution files
-data/posterior-samples/posterior-predictive/bartlema-crisscross-filtered-transfer1-chmm.rds
-data/posterior-samples/posterior-predictive/bartlema-crisscross-filtered-transfer3-chmm.rds
-data/posterior-samples/posterior-predictive/bartlema-crisscross-filtered-transfer5-chmm.rds
-data/posterior-samples/posterior-predictive/bartlema-crisscross-filtered-transfer7-chmm.rds
 data/posterior-samples/posterior-predictive/bartlema-diagonal-filtered-transfer1-chmm.rds
 data/posterior-samples/posterior-predictive/bartlema-diagonal-filtered-transfer3-chmm.rds
 data/posterior-samples/posterior-predictive/bartlema-diagonal-filtered-transfer5-chmm.rds

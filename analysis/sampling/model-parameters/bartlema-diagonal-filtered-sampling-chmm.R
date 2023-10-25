@@ -1,6 +1,8 @@
 # This code is for testing the functions with the two data sets
 
 # Load functions into R environment
+rm(list = ls())
+gc()
 source(file = "analysis/load-functions.R")
 
 # Generate the data needed for the sampler using Lee and Navarro's data set
@@ -15,7 +17,7 @@ acceptance_target <- 0.8
 cores <- as.integer(round(x = parallel::detectCores() / 2, digits = 0))
 
 prior_values <- list("gamma" = c(1, 1),
-                     "epsilon" = c(10, 100),
+                     "epsilon" = c(10, 888),
                      "alpha" = c(2, 1), 
                      "beta" = c(2, 1))
 
@@ -23,7 +25,7 @@ initial_values <- list("gamma" = rep(x = 0.5,
                                      times = dim(bartlema$response)[3]),
                        "epsilon" = rbeta(n = dim(bartlema$response)[3],
                                          shape1 = 10,
-                                         shape2 = 100),
+                                         shape2 = 888),
                        "alpha" = rep(x = 5, 
                                      times = dim(bartlema$response)[3]),
                        "beta" = rep(x = 5, 

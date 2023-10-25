@@ -40,12 +40,5 @@ plot_posterior_adequacy <- function (data, samples_y, order = "decreasing",
            col = filling[round(samples_y[trials[p, 2], t]) + 1, 
                          (data$response[data$id == trials[p, 1]])[t] + 1])      
     }
-
-    
-    # points(x = seq(1, trials[p, 3]), 
-    #        y = rep(x = length(participants) + 1 - p, times = trials[p, 3]),
-    #        pch = c(0,22)[round(samples_y[trials[p, 2], 1:trials[p,3]]) + 1], 
-    #        col = category_color[(data$response[data$id == trials[p, 1]] + 1)],
-    #        bg = category_color[(data$response[data$id == trials[p, 1]] + 1)])
   }
 }

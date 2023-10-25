@@ -9,9 +9,13 @@ trial_trial_participant <- function (data, posteriors, participant_id,
                                      shade_stimulus = FALSE, 
                                      region = c(0.05,0.05,0.05,1), 
                                      color_shade = "#9FB1BC55", 
-                                     posterior_margin = 0.08, lwd_rect = 0.1) {
+                                     posterior_margin = 0.08, lwd_rect = 0.1,
+                                     bar_width = 0.1, 
+                                     transparency_bars = TRUE) {
   
   n_trials <- data$participant_t[participant_id]
+  
+  rect_color <- c("black", "white")
   
   if (missing(plot_order)){
     plot_order <- 1:dim(data$response)[1]
@@ -70,6 +74,7 @@ trial_trial_participant <- function (data, posteriors, participant_id,
            col = 
              category_color[responses[which(!is.na(responses[, tt])), tt] + 1],
            lwd = lwd_rect)
+      
     }  
   }
   
@@ -81,18 +86,20 @@ trial_trial_participant <- function (data, posteriors, participant_id,
     
     
     for(tt in 1:n_trials) {
-      segments(x0 = rep(x = tt, times = n_stimulus),
-               x1 = rep(x = tt, times = n_stimulus),
-               y0 = ifelse(test = states_mean[, tt] > 0.5, 
-                           yes = mid, 
-                           no = a + states_mean[, tt] * (b - a)),
-               y1 = ifelse(test = states_mean[, tt] > 0.5, 
-                           yes = a + states_mean[, tt] * (b - a), 
-                           no = mid), 
-               lwd = 1.5, 
-               col = category_color[round(states_mean[, tt]) + 1])
+      rect(xleft = rep(x = tt, times = n_stimulus) - bar_width / 2,
+           xright = rep(x = tt, times = n_stimulus) + bar_width / 2,
+           ybottom = ifelse(test = states_mean[, tt] > 0.5, 
+                            yes = mid, 
+                            no = a + states_mean[, tt] * (b - a)),
+          ytop = ifelse(test = states_mean[, tt] > 0.5, 
+                        yes = a + states_mean[, tt] * (b - a), 
+                        no = mid),
+          col = rect_color[round(states_mean[, tt]) + 1],
+          border = "black", lwd = 1.3)
+      
     }
-    abline(h = mid, col = border_color, lwd = 1.83)
+    abline(h = mid, col = "#FCF6F5FF", lwd = 1.83)
+    
   }
 }
 

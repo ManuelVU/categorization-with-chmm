@@ -15,7 +15,7 @@ acceptance_target <- 0.8
 cores <- as.integer(round(x = parallel::detectCores() / 2, digits = 0))
 
 prior_values <- list("gamma" = c(1, 1),
-                     "epsilon" = c(10, 100),
+                     "epsilon" = c(10, 888),
                      "alpha" = c(2, 1), 
                      "beta" = c(2, 1))
 
@@ -23,7 +23,7 @@ initial_values <- list("gamma" = rep(x = 0.5,
                                      times = dim(lee_navarro$response)[3]),
                        "epsilon" = rbeta(n = dim(lee_navarro$response)[3],
                                          shape1 = 10,
-                                         shape2 = 100),
+                                         shape2 = 888),
                        "alpha" = rep(x = 5, 
                                      times = dim(lee_navarro$response)[3]),
                        "beta" = rep(x = 5, 
@@ -42,5 +42,7 @@ samples <- chmm_sampling(data_chmm = lee_navarro,
               hmc_acceptance = acceptance_target)
 
 # Save posterior samples
-saveRDS(object = samples, 
-        file = "data/posterior-samples/model-parameters/lee-navarro-type4-posterior-samples.rds")
+saveRDS(object = samples,
+        file = paste(c("data/posterior-samples/model-parameters/",
+                       "lee-navarro-type4-filtered-chmm.rds"), 
+                     collapse = ""))

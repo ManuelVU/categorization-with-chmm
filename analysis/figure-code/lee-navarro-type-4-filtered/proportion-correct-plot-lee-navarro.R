@@ -2,7 +2,7 @@
 lee_navarro <- readr::read_csv(
   file = "data/csv-files/lee-navarro-2002-type4-filtered.csv")
 
-# Load ploting function
+# Load plotting function
 source(file = "src/plot-f/plot-proportion-correct.R")
 
 # Figure as pdf

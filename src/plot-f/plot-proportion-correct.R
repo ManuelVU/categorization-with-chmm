@@ -1,4 +1,4 @@
-# Ploting function moving average correct responses
+# Plotting function moving average correct responses
 correct_prop_trial <- function (data, participant, window_size, 
                                 section) {
   if (missing(section)) {
