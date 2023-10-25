@@ -14,8 +14,10 @@ par(oma = c(2,2.1,0.1,0.1),
 
 source(file = "src/plot-f/plot-posterior-adequacy.R")
 
-plot_posterior_adequacy(data = lee, samples_y = samples, order = "decreasing", 
-                        category_color = c("#30626d", "#723f75"), width = 0.67,
+plot_posterior_adequacy(data = lee, samples_y = samples, 
+                        order = "decreasing", 
+                        category_color = c("#30626d", "#723f75"), 
+                        width = 0.67,
                         height = 0.6)
 box(bty = "l")
 axis(1, at = c(1, seq(1,100, 10)), padj = -1.3, tck = -0.02, cex = 1)
