@@ -4,21 +4,21 @@ source(file = "src/sampling-f/transform-data-chmm.R")
 source(file = "src/plot-f/plot-trial-trial.R")
 
 lee_navarro <- transform_data_chmm(
-  directory_data = "data/csv-files/lee-navarro-2002-type4-filtered.csv",
+  directory_data = "data/csv-files/lee-navarro-2002-type1-filtered.csv",
   directory_features = "data/stimulus-features/lee-navarro-features.csv")
 
 lee_long <- readr::read_csv(
-  file = "data/csv-files/lee-navarro-2002-type4-filtered.csv")
+  file = "data/csv-files/lee-navarro-2002-type1-filtered.csv")
 
 model_adequacy <- readRDS(
-  file = "data/posterior-samples/posterior-adequacy/lee-navarro-type4-filtered-chmm.rds")
+  file = "data/posterior-samples/posterior-adequacy/lee-navarro-type1-filtered-chmm.rds")
 
 samples <- readRDS(file = paste(c("data/posterior-samples/model-parameters/",
-                                  "lee-navarro-type4-filtered-chmm.rds"),
+                                  "lee-navarro-type1-filtered-chmm.rds"),
                                 collapse = ""))
 
 grDevices::cairo_pdf(
-  file = "figures/lee-navarro-type-4-filtered/parameters-states-all-lee-navarro.pdf",
+  file = "figures/lee-navarro-type-1-filtered/parameters-states-all-lee-navarro.pdf",
   width = 8.3, height = 10.5, onefile = TRUE)
 
 par(oma = c(3,3,10,2),
@@ -60,7 +60,7 @@ for(pp in 1:length(samples$step_size)){
   
   box(bty = "l")
   axis(1, at = c(1, seq(10,lee_navarro$participant_t[pp], 10)), 
-     padj = 0.1, tck = -0.02, cex.axis = 1.4)
+       padj = 0.1, tck = -0.02, cex.axis = 1.4)
   axis(2, las = 2, at = seq(0.16, dim(lee_navarro$response)[1], 1),
        labels = FALSE, tck = -0.01)
   axis(2, las = 2, at = seq(0.85, dim(lee_navarro$response)[1], 1),
@@ -115,18 +115,18 @@ for(pp in 1:length(samples$step_size)){
        labels = (c("0", seq(0.02,0.04,0.02))), padj = -0.2)
   mtext(text = expression(epsilon), side = 1, line = 3, cex = 1.6)
   
-  hist(samples$posterior_samples$alpha[, pp], xlim = c(1,8), axes = FALSE,
+  hist(samples$posterior_samples$alpha[, pp], xlim = c(1, 12), axes = FALSE,
        ann = FALSE, border = "#FCF6F5", col = "#30626d",
-       breaks = seq(1,8,0.25))
+       breaks = seq(1,12,0.5))
   box(bty = "l")
-  axis(side = 1, at = c(1, 3, 5, 8), cex.axis = 1.4, padj = -0.2)
+  axis(side = 1, at = c(1, 4, 8, 12), cex.axis = 1.4, padj = -0.2)
   mtext(text = expression(beta[0]), side = 1, line = 3, cex = 1.6)
   
-  hist(samples$posterior_samples$beta[, pp], xlim = c(1,8), axes = FALSE,
+  hist(samples$posterior_samples$beta[, pp], xlim = c(1, 12), axes = FALSE,
        ann = FALSE, border = "#FCF6F5", col = "#723f75",
-       breaks = seq(1,8,0.25))
+       breaks = seq(1,12,0.5))
   box(bty = "l")
-  axis(side = 1, at = c(1, 3, 5, 8), cex.axis = 1.4, padj = -0.2)
+  axis(side = 1, at = c(1, 4, 8, 12), cex.axis = 1.4, padj = -0.2)
   mtext(text = expression(beta[1]), side = 1, line = 3, cex = 1.6)
 }
 dev.off()

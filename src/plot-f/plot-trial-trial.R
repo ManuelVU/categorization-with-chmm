@@ -11,11 +11,16 @@ trial_trial_participant <- function (data, posteriors, participant_id,
                                      color_shade = "#9FB1BC55", 
                                      posterior_margin = 0.08, lwd_rect = 0.1,
                                      bar_width = 0.1, 
-                                     transparency_bars = TRUE) {
+                                     transparency_bars = TRUE, 
+                                     x_lim) {
   
   n_trials <- data$participant_t[participant_id]
   
-  rect_color <- c("black", "white")
+  if(missing(x_lim)){
+    x_lim = c(0, n_trials + 1)
+  }
+  
+  rect_color <- c("#2e3036", "#e1e4e2")
   
   if (missing(plot_order)){
     plot_order <- 1:dim(data$response)[1]
@@ -53,7 +58,8 @@ trial_trial_participant <- function (data, posteriors, participant_id,
   }
   
   plot(x = 0, y = 0, type = "n", ann = FALSE, axes = FALSE, 
-       xlim = c(0, n_trials + 1), ylim = c(0,n_stimulus + height))
+       xlim = x_lim, ylim = c(0,n_stimulus + height))
+  
   if (shade_stimulus == TRUE) {
     for (i in 1:n_stimulus) {
         rect(xleft = - (width / 2 + region[2]), 
@@ -98,7 +104,12 @@ trial_trial_participant <- function (data, posteriors, participant_id,
           border = "black", lwd = 1.3)
       
     }
-    abline(h = mid, col = "#FCF6F5FF", lwd = 1.83)
+    # abline(h = mid, col = "#FCF6F5FF", lwd = 1.83)
+    segments(x0 = rep(x = 0, times = length(mid)),
+             x1 = rep(x = n_trials + 1, times = length(mid)),
+             y0 = mid,
+             y1 = mid,
+             col = "#FCF6F5FF", lwd = 1.83)
     
   }
 }
