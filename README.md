@@ -1,31 +1,18 @@
 ## A Coupled Hidden Markov Model Framework for Measuring the Dynamics of Categorization
 
-This repository contains data, code and figures from the paper "A coupled hidden Markov model framework for measuring the dynamics of categorization".
+This repository contains data, code and figures from the paper "A coupled hidden Markov model framework for measuring the dynamics of categorization". A pre-print version of this paper can be found at: [PsyArXive](https://osf.io/preprints/psyarxiv/76g4d/). 
 
-A pre-print version of this paper can be found at: [PsyArXive](https://osf.io/preprints/psyarxiv/76g4d/}
+This repository is organized as follows:
 
-This is a repository for the project on modeling categorization using Coupled 
-Hidden Markov models (CHMM).
+- `data/` contains raw data files, clean data files, stimulus features and posterior samples. **Note:** posterior samples have been omitted from the repository, but will be saved in their corresponding directory once the code is run.
 
-----
+- `src/` contains functions that deal with data parsing, summaries, simulation, similarity, sampling and plots.
 
-- What is the organization of the git repo, what can be found on each directory
+- `analysis/` contains code used for evaluating participants, sampling and drawing figures presented in the paper.
 
-----
+- `figures/` contains the figures used in the paper alongside additional plots of all participants.
 
-- Brief description of the files in data.
+---
+**Citations**
 
-----
-
-- Brief description of the files in src
-
-----
-
-- Brief description of the files in app
-
-----
-
-- Brief description of the files in fig
-
-
-
+Villarreal, M., & Lee, M. D. (2023, November 14). *A Coupled Hidden Markov Model Framework for Measuring the Dynamics of Categorization*. Retrieved from osf.io/preprints/psyarxiv/76g4d
