@@ -25,19 +25,13 @@ pp <- 3
 trial_trial_participant(data = lee_navarro, posterior_add = TRUE, 
                         posteriors = samples,
                         participant_id = pp, width = 0.75, height = 0.33,
-                        category_color = c("#25272b", "#e1e4e2"),
+                        category_color = c("#25272b", "white"),
                         border_color = "black", shade_stimulus = TRUE,
                         bar_width = 0.27, transparency_bars = FALSE, 
                         lwd_rect = 1.5)
 box(bty = "l")
 mtext(text = paste("Participant: ", pp), 
       side = 3, outer = TRUE, cex = 1.4, line = -0.5)
-
-# axis(1, at = c(1, seq(10,lee_navarro$participant_t[6], 10)), 
-#      padj = -0.5, tck = -0.02, cex.axis = 1.2,
-#      labels = rep(x = "",
-#                   times =
-#                     length(c(1, seq(10,lee_navarro$participant_t[6], 10)))))
 
 axis(1, padj = -0.5, tck = -0.02, cex.axis = 1.2,
      at = c(1, seq(10,lee_navarro$participant_t[pp], 10), 
@@ -93,7 +87,7 @@ pp <- 6
 trial_trial_participant(data = lee_navarro, posterior_add = TRUE, 
                         posteriors = samples,
                         participant_id = pp, width = 0.75, height = 0.33,
-                        category_color = c("#25272b", "#e1e4e2"),
+                        category_color = c("#25272b", "white"),
                         border_color = "black", shade_stimulus = TRUE,
                         bar_width = 0.27, transparency_bars = FALSE, 
                         lwd_rect = 1.5)
