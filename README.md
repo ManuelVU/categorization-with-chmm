@@ -15,4 +15,4 @@ This repository is organized as follows:
 ---
 **Citations**
 
-Villarreal, M., & Lee, M. D. (2023, November 14). *A Coupled Hidden Markov Model Framework for Measuring the Dynamics of Categorization*. Retrieved from osf.io/preprints/psyarxiv/76g4d
+Villarreal, M., & Lee, M. D. (2023, November 14). *A Coupled Hidden Markov Model Framework for Measuring the Dynamics of Categorization*. Retrieved from: osf.io/preprints/psyarxiv/76g4d
