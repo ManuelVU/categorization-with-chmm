@@ -1,10 +1,32 @@
-# Function that applies the forward filter backward sample algorithm to a 
-# of a single chain in a given participant. 
+################################################################################
+# Forward Filter Backward Sample algorithm.
+# The function returns a list with a sample of the conditional posterior 
+# distribution of the unobserved states and the summed log-likelihood for the 
+# sequence
+################################################################################
 
-forward_backward <- function(update_stimulus_id, unobserved_states, responses,
-                             similarity, n_states, total_trials,
-                             response_error, initial_probability, 
-                             inertia_category_a, inertia_category_b){
+# This function takes 10 arguments
+#   1:  update_stimulus_id, id of the stimulus to be updated.
+#   2:  unobserved_states, current sample of the hidden states for all stimuli.
+#   3:  responses, vector of responses across trials. 
+#   4:  similarity, a symmetric similarity matrix. 
+#   5:  n_states, number of possible states a chain can take.
+#   6:  total_trials, total number of trials for a given participant.
+#   7:  response_error, value for the trembling-hand parameter.
+#   8:  initial_probability, initial probability of states (vector of size N -1)
+#   9:  inertia_category_a, stickiness parameter in favor of category 0.
+#   10: inertia_category_b, stickiness parameter in favor of category 1. 
+
+forward_backward <- function(update_stimulus_id,
+                             unobserved_states,
+                             responses,
+                             similarity,
+                             n_states,
+                             total_trials,
+                             response_error,
+                             initial_probability,
+                             inertia_category_a,
+                             inertia_category_b){
   
   source(file = "src/sampling-f/transition-others.R")
   source(file = "src/sampling-f/logit.R")
@@ -152,25 +174,3 @@ forward_backward <- function(update_stimulus_id, unobserved_states, responses,
   return(list(unobserved_states[update_stimulus_id, ], sum(log(likelihood))))
   
 }
-
-
-
-# Test function
-
-# a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
-# b <- distinctive_ln(stimulus_features = a)
-# d <- featural_distance(distinctive_features = b)
-# s <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
-
-# ff <- forward_backward(responses = rbinom(n = 5, size = 1, prob = 0.5),
-#                        total_trials = 5,
-#                  update_stimulus = 1,
-#                  similarity = s,
-#                  n_states = 2,
-#                  unobserved_states =
-#                    matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
-#                           ncol = 5, nrow = 9),
-#                  response_error = 0.1,
-#                  initial_probability = 0.2,
-#                  inertia_category_a = 1,
-#                  inertia_category_b = 1)

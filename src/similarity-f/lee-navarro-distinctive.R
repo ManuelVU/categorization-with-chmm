@@ -1,11 +1,19 @@
-# Function takes a matrix of stimulus features and returns two multidimensional
-# arrays named for features in stimulus i not shared with stimulus j 
-# (in_i_not_in_j) and features that are not in i but are in j (not_in_i_in_j)
-# distinctive features between all of them.
+################################################################################
+# Function takes a matrix of stimulus features and returns two multidimensional 
+# arrays named after features in stimulus I not shared with stimulus J 
+# (in_i_not_in_j) and features that are not in I but are in J (not_in_i_in_j)
+################################################################################
 
+#---
 # Formally, the function returns a matrix with f_ik (1-f_jk) and (1-f_ik) f_jk
-# with dimensions organised in multiple matrix that contain all other stimulus
-# being compared in rows and features in columns.
+# where k represents the feature. These are returned as two independent lists 
+# containing multiple matrices.
+#---
+
+# The function takes a single argument
+#   1: stimulus_features, which is a stimulus-features matrix with columns
+#      | stimulus_id | stimulus_name | feature_1 | ... | feature_n |
+
 distinctive_ln <- function(stimulus_features){
   
   n_stimulus <- nrow(stimulus_features)
@@ -38,4 +46,3 @@ distinctive_ln <- function(stimulus_features){
   }
   return(output)
 }
-

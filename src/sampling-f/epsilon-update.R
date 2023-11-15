@@ -1,6 +1,16 @@
-# Function that takes a single sample of the conditional posterior distribution
-# of the error parameter in the categorization model. The error parameter
-# starts with a beta prior.
+################################################################################
+# Function that returns a sample of the conditional posterior distribution of  
+# the trembling-hand parameter in the CHMM model as a p-dimentional vector where 
+# represents the number of participants.
+################################################################################
+
+# This function takes three arguments:
+#   1: states_all, current sample of the hidden states of all participants.
+#   2: responses_all, participants' responses to all stimuli in the study across 
+#      trials.
+#   3: epsilon_prior, value of the parameters of the beta prior distribution 
+#      assigned to the trembling-hand parameter.
+
 epsilon_update <- function(states_all, responses_all, epsilon_prior){
   error_s0 <- (states_all == 0 & responses_all == 1) |> 
     apply(MARGIN = 3, FUN = sum, na.rm = TRUE)

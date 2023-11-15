@@ -1,6 +1,14 @@
-# Function that reads and writes data from one or more of the conditions in
-# Lee and Navarro (2002) file is whiten in long-format as a .csv into the 
-# ~/data/csv-files directory. 
+################################################################################
+# Function that reads raw data from Lee and Navarro's 2002 experiment and writes
+# it in long format as a .csv file.
+################################################################################
+
+# Function takes 3 arguments: 
+#   1: file_suffix, used to generate the name of the .csv file.
+#   2: conditions_keep, which experimental conditions should be kept in the 
+#      final file.
+#   3: participants_keep, which participants should be kept in the final file.
+
 lee_navarro_rw <- function(file_suffix,
                            conditions_keep = c(1:4), 
                            participants_keep = c(1:22)){

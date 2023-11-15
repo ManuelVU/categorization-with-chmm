@@ -1,11 +1,18 @@
-# Function that draws a single sample of the initial probability parameter 
-# gamma, the argument gamma_prior has to be a two dimensional vector with 
-# (alpha, beta).
+################################################################################
+# Function that returns a single sample of the posterior distribution of the 
+# initial state probability parameter.
+# The function returns a single sample of the conditional posterior distribution 
+# of the initial probability parameter for each participant as a p-dimensional 
+# vector
+################################################################################
+
+# The function takes two arguments
+#   1: initial_states, matrix of initial states for all stimulus in rows and 
+#      participants in columns.
+#   2: gamma_prior, two dimensional vector with the parameters of the prior 
+#      distribution of the initial state probability parameter
 
 gamma_update <- function(initial_states, gamma_prior){
-  
-  # category_a <- length(initial_states == 0)
-  # category_b <- length(initial_states == 1)
   
   category_a <- colSums(x = 1 - initial_states)
   category_b <- colSums(x = initial_states)

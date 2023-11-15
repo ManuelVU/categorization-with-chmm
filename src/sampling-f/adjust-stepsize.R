@@ -1,4 +1,14 @@
-# Function to adjust the step size of the HMC sampling algorithm
+################################################################################
+# Function that adjusts the step size in the HMC algorithm. This function is 
+# used during the CHMM sampling process.
+################################################################################
+
+# This function takes the following arguments:
+#   1: step_size, current step size between iterations of the HMC algorithm.
+#   2: acceptance_prob, current acceptance probability calculated as the 
+#      proportion of accepted samples in the last 100 samples from the HMC.
+#   3: target_acceptance, target acceptance probability for samples drawn with 
+#      with the HMC algorithm.
 
 adjust_step <- function(step_size, acceptance_prob, target_acceptance){
  
