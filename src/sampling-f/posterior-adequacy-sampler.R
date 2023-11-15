@@ -1,5 +1,17 @@
-# Function that takes posterior samples and generates a sample of the posterior
-# adequacy of the CHMM by sampling Y_t
+################################################################################
+# Function that samples from the posterior predictive distribution of a single
+# participant with a fixed experimental design.
+# The function returns a matrix where the rows index the iteration number and 
+# the columns index the trial number
+################################################################################
+
+# This function takes 5 arguments
+#   1: iterations, number of posterior samples to take.
+#   2: posterior, posterior samples of the parameters in the model
+#   3: stimulus_id, id of the stimulus presented at each trial.
+#   4: participant_id, id of the participant to sample.
+#   5: total_trials, total number of trials completed by participant in the 
+#      experiment.
 
 posterior_adequacy <- function (iterations, 
                                 posterior, 

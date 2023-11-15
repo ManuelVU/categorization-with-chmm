@@ -1,10 +1,32 @@
-# Function for updating the logarithm of the inertia parameters using the 
-# Hamiltonian Monte Carlo algorithm
+################################################################################
+# Hamiltonian Monte Carlo algorithm for the stickiness parameters.
+# Function returns two elements on a list, first is a vector with the sampled 
+# values of f(alpha) = log(alpha) and f(beta) = log(beta) respectively, and a 
+# value of the potential energy of the sample that can be used in the next 
+# iteration of the algorithm.
+################################################################################
 
-hamiltonian_mc <- function(states, alpha_tilde, beta_tilde, 
-                           alpha_prior, beta_prior,
+# Function takes 8 arguments
+#   1: states, current sample of the hidden states for a given participant p.
+#   2: alpha_tilde, value of the logarithm of the stickiness parameter alpha.
+#   3: beta_tilde, value of the logarithm of the stickiness parameter beta.
+#   4: alpha_prior, values of the parameters of the gamma prior distribution of 
+#      the stickiness parameter alpha.
+#   5: beta_prior, values of the parameters of the gamma prior distribution of 
+#      the stickiness parameter beta.
+#   6: similarity, symmetric between stimuli similarity matrix.
+#   7: leap_size, step size to be used between computations of the momentum 
+#      variable.
+#   8: leap, number of iterations for the calculation of momentum.
+
+hamiltonian_mc <- function(states,
+                           alpha_tilde,
+                           beta_tilde, 
+                           alpha_prior,
+                           beta_prior,
                            similarity,
-                           leap_size, leap) {
+                           leap_size,
+                           leap) {
   
   total_trials <- dim(states)[2]
   
@@ -90,22 +112,3 @@ hamiltonian_mc <- function(states, alpha_tilde, beta_tilde,
                       no = return(list(current_position, 0))),
          no = return(list(current_position, 0)))
 }
-
-# test
-
-# a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
-# b <- distinctive_ln(stimulus_features = a)
-# d <- featural_distance(distinctive_features = b)
-# sm <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
-# 
-# st <- matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
-#        ncol = 5, nrow = 9)
-# 
-# lp <- log_posterior(alpha_tilde = 1, beta_tilde = 2,
-#               states = st,
-#               total_trials = 5, n_stimulus = 9, similarity = sm,
-#               alpha_prior = c(1, 1), beta_prior = c(1, 1))
-# 
-# hamiltonian_mc(states = st, alpha_tilde = 1, beta_tilde = 2,
-#                alpha_prior = c(1, 1), beta_prior = c(1, 1),
-#                similarity = sm, leap_size = 0.3, leap = 20)

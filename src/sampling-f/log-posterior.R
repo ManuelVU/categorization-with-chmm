@@ -1,9 +1,32 @@
-# Function that calculates the logarithm of the joint full conditional for the 
-# alpha and beta parameters in the model.
+################################################################################
+# Function calculates the logarithm of the full joint conditional posterior 
+# distribution of the logarithm of the stickiness parameters in the CHMM model 
+# f(alpha) = log(alpha) and f(beta) = log(beta)
+# Function returns a single value with the evaluation of the logarithm of the 
+# full joint conditional posterior distribution of the parameters f(alpha) and 
+# f(beta) evaluated at the values alpha_tilde and beta_tilde 
+################################################################################
 
-log_posterior <- function(states, alpha_tilde, beta_tilde,
-                          alpha_prior, beta_prior,
-                          similarity, total_trials, n_stimulus){
+# This function takes 8 arguments
+#   1: states, current sample of the hidden states for a given participant p.
+#   2: alpha_tilde, value of the logarithm of the stickiness parameter alpha.
+#   3: beta_tilde, value of the logarithm of the stickiness parameter beta.
+#   4: alpha_prior, values of the parameters of the gamma prior distribution of 
+#      the stickiness parameter alpha.
+#   5: beta_prior, values of the parameters of the gamma prior distribution of 
+#      the stickiness parameter beta.
+#   6: similarity, symmetric between stimuli similarity matrix.
+#   7: total_trials, total number of trials of participant p.
+#   8: n_stimulus, total number of stimuli in the task.
+
+log_posterior <- function(states,
+                          alpha_tilde,
+                          beta_tilde,
+                          alpha_prior,
+                          beta_prior,
+                          similarity,
+                          total_trials,
+                          n_stimulus){
   
   l_posterior <- 0
   
@@ -54,17 +77,3 @@ log_posterior <- function(states, alpha_tilde, beta_tilde,
   return(l_posterior)
 
 }
-
-
-# test
-
-# a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
-# b <- distinctive_ln(stimulus_features = a)
-# d <- featural_distance(distinctive_features = b)
-# k <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
-# 
-# log_posterior(alpha_tilde = 1, beta_tilde = 2, 
-#               states = matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
-#                               ncol = 5, nrow = 9),
-#               total_trials = 5, n_stimulus = 9, similarity = k,
-#               alpha_prior = c(0.1, 0.1), beta_prior = c(0.1, 0.1))

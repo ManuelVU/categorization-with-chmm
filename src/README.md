@@ -29,75 +29,15 @@ The directory `~/sampling-f/` contains functions used by the sampling methods th
 
   - `adjust-stepsize.R` function that adjusts the step-size used for HMC. This function is used by the `chmm-sampler` during the burn-in period if it contains at least 100 samples. The function takes as arguments the previous step-size (`stepsize`), the current acceptance probability (`acceptance_prob`), and the target acceptance probability of the algorithm (`target_acceptance`). The function returns a single value for the next step-size.
   - `chmm-sampler.R` function that returns a list containing the posterior samples after a specified burn-in period of the the parameters of the CHMM model. The function returns a list that contains the posterior samples, the acceptance probability and the step size used by the HMC algorithm for each participant. The function takes as arguments the data from an experiment in a chmm format (`data_chmm`), a metric (`metric`), an order for the metric (`order_p`), a number of iterations (`n_iterations`), a number of samples to discard (`n_burn`), the number of cores to be used for parallel computing (`n_cores`), a list with the initial values of the parameters in the model (`parameters_initial_values`), a starting step size for the HMC algorithm (`start_step_size`), an acceptance probability for the HMC algorithm (`hmc_acceptance`) and a list with the prior values for the distributions of the parameters in the model.
-  - `epsilon-update.R` sample of the conditional posterior distribution of the classification error parameter by participant. The function returns a *p-dimensional* vector of samples where $p$ represents the number of participants in the study. This function takes as arguments the current states sample of all participants (`states_all`), participants responses to all stimulus in the study across trials (`responses_all`) and the value of the parameters of the beta prior distribution assigned to the classification error parameter $\epsilon$. 
-  - `ffbs.R` forward filter backward sample algorithm, the function takes a 
-      stimulus id (`update_stimulus_id`), a set of unobserved states 
-        (`unobserved_states`) and a vector of responses (`responses`) and calculates 
-        the conditional filtered probabilities used in by the backward sample 
-        algorithm to generate a posterior sample of the states associated with the 
-        stimulus being updated. The function also requires the following data:
-        a symmetric similarity matrix (`similarity`; used by `transition_others.R` 
-        function), the number of possible states a chain can take (`n_states`), a 
-        value for the response error parameter (`response_error`), a value of the 
-        initial state probability distribution $\gamma$ of size equal to the number of 
-        states minus one (`initial_probability`), an inertia parameter in favor of 
-        category A (`inertia_category_a`) and one for category B 
-        (`inertia_category_b`). The function returns a sample of the unobserved states 
-        for the given stimulus and the sum of the log-likelihood for the sequence in 
-        the form of a list. This function is used by the `forward_backward_all` 
-        function in `participant-chains-update.R`.
-  - `gamma-update.R` single sample of the posterior distribution of the initial
-      state probability parameter $\gamma$. The function takes as arguments a vector
-        of the initial states $X_{t=1}^{[1:C,\ 1:P]}$ of all participants and 
-        stimulus (`initial_states`), and a two dimensional vector with the parameters 
-        of the prior distribution of the parameter `gamma_prior`. The function returns
-        a single sample of the conditional posterior probability of $\gamma$.
-  - `gradient-inertia.R` partial derivative of the full joint posterior 
-      distribution of the logarithm of the inertia parameters in the categorization 
-        model ($\tilde{\alpha} = ln(\alpha)$ and $\tilde{\beta} = ln(\beta)$). The 
-        function takes as arguments the current sample of the hidden states for a 
-        fixed participant P $X_{t=1}^{[1:C,\ P]}$ (`states`), a value of the logarithm 
-        of the inertia parameters (`alpha_tilde` and `beta_tilde`), two vectors with 
-        the value of the parameters of the gamma prior distribution of the inertia 
-        parameters (`alpha_prior` and `beta_prior`), a similarity matrix 
-        (`similarity`), the total number of trials (`total_trials`) and the total 
-        number of stimulus (`n_stimulus`). The function returns a vector with the 
-        value of the partial derivative of the fill joint conditional posterior 
-        distribution of $\tilde{\alpha}$ and $\tilde{\beta}$ as a two dimensional 
-        vector in the order ($\tilde{\alpha}$, $\tilde{\beta}$). This function is used 
-        exclusively by `hamiltoninan-mc.R`.
-  - `hamiltonian-mc.R` Hamiltonian Monte Carlo algorithm. The function takes 
-      nine arguments, the current sample of the states (`states`), the values of the
-        logarithm of the inertia parameters (`alpha_tilde` and `beta_tilde`), two 
-        vectors with the values of the parameters of the prior distribution of the 
-        inertia parameters $\alpha$ and $\beta$ (`alpha_prior` and `beta_prior`), a 
-        similarity matrix (`similarity`), a step size for the Hamiltonian dynamics 
-        (`epsilon`) a number of leaps used by the leapfrog part of the algorithm and 
-        the potential energy of the current value of the parameters 
-        (`potential_current`). The function returns two elements on a list, first is 
-        a vector with the sampled values of $\tilde{alpha}$ and $\tilde{\beta}$ 
-        respectively, and a value of the potential energy of the sample to be used
-        in the next iteration of the algorithm.
-  - `logit.R` function that takes a value `x` and returns the logit of $x$, 
-      defined as: $$\frac{1}{1+e^{-x}}.$$
-  - `log-posterior.R` calculates the logarithm of the logarithm of the full 
-      joint conditional posterior distribution of the logarithm of the inertia 
-        parameters in the categorization model ($\tilde{\alpha} = ln(\alpha)$ and 
-        $\tilde{\beta} = ln(\beta)$). The function takes as arguments the current 
-        sample of the hidden states for a fixed participant P $X_{t=1}^{[1:C,\ P]}$ 
-        (`states`), a value of the logarithm  of the inertia parameters (`alpha_tilde` 
-        and `beta_tilde`), two vectors with the value of the parameters of the gamma 
-        prior distribution of the inertia parameters (`alpha_prior` and `beta_prior`), 
-        a similarity matrix (`similarity`), the total number of trials 
-        (`total_trials`) and the total number of stimulus (`n_stimulus`). The function
-        returns a single value with the evaluation of the logarithm of the full joint
-        conditional posterior distribution of the parameters $\tilde{\alpha}$ and 
-        $\tilde{\beta}$ evaluated at the values `alpha_tilde` and `beta_tilde`. This 
-        function is used exclusively by `hamiltoninan-mc.R`.
-  - `participant-chains-update.R` function in this file applies the forward 
-      filter backward sample algorithm to all chains (stimulus) of a single 
-        participant. The function is used by the sampler in order to parallelize some 
-        of the sampling process.
+  - `epsilon-update.R` sample of the conditional posterior distribution of the trembling-hand parameter by participant. The function returns a *p-dimensional* vector of samples where $p$ represents the number of participants in the study. This function takes as arguments the current states sample of all participants (`states_all`), participants responses to all stimulus in the study across trials (`responses_all`) and the value of the parameters of the beta prior distribution assigned to the trembling-hand parameter $\epsilon$. 
+  - `ffbs.R` forward filter backward sample algorithm. The function returns a list with a sample of the conditional posterior distribution of the unobserved states and the summed log-likelihood for the sequence. The function takes as arguments a stimulus id (`update_stimulus_id`), a set of unobserved states (`unobserved_states`) and a vector of responses (`responses`) and calculates the conditional filtered probabilities used in by the backward sample algorithm to generate a posterior sample of the states associated with the stimulus being updated. The function also requires the following data: a symmetric similarity matrix (`similarity`), the number of possible states a chain can take (`n_states`), a value for the trembling-hand parameter (`response_error`), a value of the initial state probability distribution of size equal to the number of states minus one (`initial_probability`), a stickiness parameter in favor of category A (`inertia_category_a`) and one for category B (`inertia_category_b`). 
+  - `gamma-update.R` single sample of the posterior distribution of the initial state probability parameter $\gamma$. The function returns a single sample of the conditional posterior distribution of the initial probability parameter $\gamma$ for each participant as a *p-dimensional* vector. The function takes as arguments a matrix of initial states of all stimulus as rows and participants as columns (`initial_states`), and a two dimensional vector with the parameters of the prior distribution of the parameter `gamma_prior`. 
+  - `gradient-inertia.R` partial derivative of the full joint posterior distribution of the logarithm of the stickiness parameters in the categorization model ($\tilde{\alpha} = ln(\alpha)$ and $\tilde{\beta} = ln(\beta)$). The function returns a vector with the value of the partial derivative of the full joint conditional posterior distribution of $\tilde{\alpha}$ and $\tilde{\beta}$ as a two dimensional vector in the order ($\tilde{\alpha}$, $\tilde{\beta}$). The function takes as arguments the current sample of the hidden states for a given participant **p** $X_{t=1}^{[1:C,\ p]}$ (`states`), a value of the logarithm of the stickiness parameters (`alpha_tilde` and `beta_tilde`), two vectors with the value of the parameters of the gamma prior distribution of the parameters (`alpha_prior` and `beta_prior`), a between stimulus similarity matrix (`similarity`), the total number of trials for the participant (`total_trials`) and the total number of stimulus (`n_stimulus`). This function is used exclusively by `hamiltoninan-mc.R`.
+  - `hamiltonian-mc.R` Hamiltonian Monte Carlo algorithm. The function returns two elements on a list, first is a vector with the sampled values of $\tilde{alpha}$ and $\tilde{\beta}$ respectively, and a value of the potential energy of the sample to be used in the next iteration of the algorithm. The function takes nine arguments, the current sample of the states (`states`), the values of the logarithm of the stickiness parameters (`alpha_tilde` and `beta_tilde`), two vectors with the values of the parameters of the prior distribution of the stickiness parameters $\alpha$ and $\beta$ (`alpha_prior` and `beta_prior`), a between stimulus similarity matrix (`similarity`), a step size for the Hamiltonian dynamics (`epsilon`) a number of leaps used by the leapfrog part of the algorithm and the potential energy of the current value of the parameters (`potential_current`).
+  - `log-posterior.R` calculates the logarithm of the full joint conditional posterior distribution of the logarithm of the stickiness parameters in the CHMM model ($\tilde{\alpha} = ln(\alpha)$ and $\tilde{\beta} = ln(\beta)$). The function returns a single value with the evaluation of the logarithm of the full joint conditional posterior distribution of the parameters $\tilde{\alpha}$ and $\tilde{\beta}$ evaluated at the values `alpha_tilde` and `beta_tilde`. The function takes as arguments the current sample of the hidden states for a fixed participant **p** $X_{t=1:T}^{[1:C,\ p]}$ (`states`), a value of the logarithm  of the stickiness parameters (`alpha_tilde` and `beta_tilde`), two vectors with the value of the parameters of the gamma prior distribution of the inertia parameters (`alpha_prior` and `beta_prior`), a between stimuli similarity matrix (`similarity`), the total number of trials (`total_trials`) and the total number of stimulus (`n_stimulus`).  This function is used exclusively by `hamiltoninan-mc.R`.
+  - `logit.R` function that takes a value `x` and returns the logit of $x$, defined as: $$\frac{1}{1+e^{-x}}.$$
+  - `participant-chains-update.R` function applies the forward filter backward sample algorithm to all stimuli for a single participant. This function returns a sample of the hidden states of all stimuli at every trial in matrix form. This function takes as arguments the current sample of the hidden states (`states_current`), the participant's responses (`responses`) as a matrix (NA if the stimulus was not presented), a between stimuli symmetric similarity matrix (`similarity`), the number of states in the model (`n_states`), the total number of trials (`total_trials`), the total number of stimuli (`total_chains`), the current value of the trembling hand parameter $\epsilon$ (`epsilon`), the current value of the initial probability parameter $\gamma$ (`gamma`), the current value of the stickiness parameter for category 0 $\alpha$ (`alpha`) and the current value of the stickiness parameter for category 1 $\beta$ (`beta`). This function is used by the sampler to parallelize some of the sampling process.
+  - `posterior-adequacy-sampler.R` function that samples from the posterior predictive distribution of a fixed participant given the design of the experiment. The function returns a matrix where the rows index the iteration number and the columns index the trial number. This function takes as arguments the number of posterior samples to take (`iterations`), the posterior samples of the parameters in the model (`posterior`), the stimulus id for each trial (`stimulus_id`), the id of participant p as organized in the posterior samples (`participant_id`) and the total number of trials of the participant (`total_trials`).
   - `sample-prior-states.R` function that generates initial values for the 
       hidden states of the CHMM. The function takes the following arguments: the 
         number of chains or stimulus (`n_chains`), the number of trials per 
@@ -122,15 +62,4 @@ The directory `~/sampling-f/` contains functions used by the sampling methods th
         stimulus that is currently being updated (`current_id`), an inertia parameter 
         in favor of category A (`alpha`) and an inertia parameter in favor of category 
         B (`beta`).
-
-----
-
-TO DO
-
-Need a function that can update all stimulus unobserved values in a single 
-pass using the ffbs function, then we could do some parallel computing using 
-that function.
-
-Need to adjust functions so that they can take into account the different number
-of trials for each participant.
 

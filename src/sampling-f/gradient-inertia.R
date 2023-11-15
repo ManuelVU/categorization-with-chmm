@@ -1,9 +1,32 @@
-# Function that calculates the gradient of the log joint posterior of the 
-# inertia parameters in the model.
+################################################################################
+# Function for the partial derivatives of the full joint posterior distribution 
+# of the stickiness parameters in the CHMM model.
+# The function returns a vector with the value of the partial derivative of the 
+# full joint conditional posterior distribution of f(alpha) = log(alpha) 
+# and f(beta) = log(beta) as a two dimensional vector in the order 
+# (f(alpha), f(beta))
+################################################################################
 
-gradient_inertia <- function(states, alpha_tilde, beta_tilde, 
-                             alpha_prior, beta_prior, similarity, 
-                             total_trials, n_stimulus){
+# Function takes 8 arguments
+#   1: states, current sample of the hidden states for a given participant p.
+#   2: alpha_tilde, value of the logarithm of the stickiness parameter alpha.
+#   3: beta_tilde, value of the logarithm of the stickiness parameter beta.
+#   4: alpha_prior, values of the parameters of the gamma prior distribution of 
+#      the stickiness parameter alpha.
+#   5: beta_prior, values of the parameters of the gamma prior distribution of 
+#      the stickiness parameter beta.
+#   6: similarity, symmetric between stimuli similarity matrix.
+#   7: total_trials, total number of trials of participant p.
+#   8: n_stimulus, total number of stimuli in the task.
+
+gradient_inertia <- function(states,
+                             alpha_tilde,
+                             beta_tilde, 
+                             alpha_prior,
+                             beta_prior,
+                             similarity, 
+                             total_trials,
+                             n_stimulus){
   
   gradient <- c(0, 0)
   
@@ -71,17 +94,3 @@ gradient_inertia <- function(states, alpha_tilde, beta_tilde,
   }
   return(gradient)
 }
-
-  
-# Test
-
-# a <- readr::read_csv(file = "data/stimulus-features/lee-navarro-features.csv")
-# b <- distinctive_ln(stimulus_features = a)
-# d <- featural_distance(distinctive_features = b)
-# k <- similarity_ij(decay_rate = 1, decay_function = 1, dissimilarity = d)
-# 
-# gradient_inertia(alpha_tilde = 1, beta_tilde = 2,
-#                  states = matrix(rbinom(n = 9 * 5, size = 1, prob = 0.5),
-#                                  ncol = 5, nrow = 9),
-#                  total_trials = 5, n_stimulus = 9, similarity = k,
-#                  alpha_prior = c(0.1, 0.1), beta_prior = c(0.1, 0.1))
