@@ -41,7 +41,7 @@ posterior_adequacy <- function (iterations,
   
   position <- 0
   
-  for (i in iterations){
+  for (i in iterations) {
     position <- position + 1
     
     for (t in 1:total_trials) {

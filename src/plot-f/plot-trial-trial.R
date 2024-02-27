@@ -20,7 +20,7 @@ trial_trial_participant <- function (data, posteriors, participant_id,
     x_lim = c(0, n_trials + 1)
   }
   
-  rect_color <- c("#2e3036", "white")
+  rect_color <- category_color
   
   if (missing(plot_order)){
     plot_order <- 1:dim(data$response)[1]

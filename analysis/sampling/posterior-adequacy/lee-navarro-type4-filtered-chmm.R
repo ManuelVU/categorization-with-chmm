@@ -7,7 +7,7 @@ lee_navarro <- readr::read_csv(
 # Load posterior samples from CHMM model
 samples <- readRDS(
   file = paste(c("data/posterior-samples/model-parameters/",
-                 "lee-navarro-type4-posterior-samples.rds"), 
+                 "lee-navarro-type4-filtered-chmm.rds"), 
                collapse = ""))
 
 # Load posterior adequacy sampler function

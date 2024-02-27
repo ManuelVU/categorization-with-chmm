@@ -1,6 +1,6 @@
 plot_posterior_adequacy <- function (data, samples_y, order = "decreasing",
                                      category_color = c("#D81159", "#234E70"), 
-                                     width = 1, height = 1) {
+                                     width = 1, height = 1, increase = 3) {
   participants <- unique(data$id)
   trials <- c()
   count <- 0
@@ -27,7 +27,7 @@ plot_posterior_adequacy <- function (data, samples_y, order = "decreasing",
   
   plot(x = 0, y = 0, ann = FALSE, axes = FALSE, type = 'n', 
        ylim = c(0.5, length(participants) + 0.5), 
-       xlim = c(0, max(trials[, 3]) + 1))
+       xlim = c(0, max(trials[, 3]) + increase))
   
   for (p in 1:length(participants)) {
     for (t in 1:trials[p, 3]) {
