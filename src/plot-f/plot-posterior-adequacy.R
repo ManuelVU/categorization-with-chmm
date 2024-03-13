@@ -1,11 +1,12 @@
 plot_posterior_adequacy <- function (data, samples_y, order = "decreasing",
-                                     category_color = c("#D81159", "#234E70"), 
+                                     category_color = c("#D81159", "#234E70"),
+                                     fill_color = NA,
                                      width = 1, height = 1, increase = 3) {
   participants <- unique(data$id)
   trials <- c()
   count <- 0
   
-  filling <- rbind(c(NA, NA), 
+  filling <- rbind(c(fill_color, fill_color), 
                    category_color)
   
   for (i in participants) {

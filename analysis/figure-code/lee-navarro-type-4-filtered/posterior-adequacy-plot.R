@@ -55,10 +55,13 @@ par(oma = c(2.5,0,0.5,0.5),
     mai = c(0,0.55,0,0),
     xaxs = "i")
 
+part_color<- c("#d72631", "#77c593", "#1868ae")
+
 plot_posterior_adequacy(data = lee_filt,
                         samples_y = adequacy,
                         order = "decreasing",
-                        category_color = c("#30626d", "#723f75"),
+                        category_color = c("#ffc550", "#00b1ff"),
+                        # category_color = c("#d72631", "#1868ae"),
                         width = 0.67,
                         height = 0.6, 
                         increase = 5)
@@ -81,7 +84,7 @@ box(bty = "l")
 for (i in 1:dim(adequacy)[1]) {
   logit_part_i <- moving_average(data = log(adequacy[i, 1:participant_t[i]] / 
                                         (1 - adequacy[i, 1:participant_t[i]])), 
-                                 window_size = 10)
+                                 window_size = 5)
   
   lines(x = logit_part_i, lwd = 1.5, col = "#80858877", type = "o", pch = 16,
         cex = 0.5)
@@ -89,33 +92,36 @@ for (i in 1:dim(adequacy)[1]) {
 }
 
 highlight_p <- c(which(participant_t == 49),
+                 which(participant_t == 68)[1],
                  which(participant_t == 77))
 
+count <- 0
+
 for(i in highlight_p) {
+  count <- count + 1
+  
   logit_part_i <- 
     moving_average(data = log(adequacy[i, 1:participant_t[i]] / 
                                 (1 - adequacy[i, 1:participant_t[i]])), 
-                   window_size = 10)
+                   window_size = 5)
   
   lines(x = logit_part_i, lwd = 1.5, type = "o", pch = 16, cex = 0.5,
-        col = "#25272b")
+        col = part_color[count])
 }
 
-text(x = c(50, 78), 
+text(x = c(50, 69, 78), 
      y = log(0.992 / (1 - 0.992)), 
-     labels = participant_labels[c(1,8)], 
-     cex = 1.3)
+     labels = participant_labels[c(1, 4, 8)], 
+     cex = 1.3, col = part_color)
 
 axis(side = 1, at = c(1, seq(from = 10, to = 100, 10)), 
      padj = - 1.7, tck = -0.02, cex.axis = 0.85)
 
-axis(side = 2, las = 2, at = seq(from = 0, to = 5),
-     labels = 100 * round(x = exp(seq(from = 0, to = 5)) / 
-                              (1 + exp(seq(from = 0, to = 5))), 
-                          digits = 2),
-     cex.axis = 1, hadj = 0.25, tck = -0.02)
+axis(side = 2, las = 2, at = log(c(0.5, 0.9, 0.99) / (1 - c(0.5, 0.9, 0.99))),
+     labels = c("0.50", "0.90", "0.99"),
+     cex.axis = 0.85, hadj = 0.55, tck = -0.02)
 
-mtext(text = "Proportion of agreement", side = 2, line = 1.5, cex = 1.25)
+mtext(text = "Probability of agreement", side = 2, line = 1.8, cex = 1.25)
 
 mtext(text = "Trial", side = 1, outer = TRUE, cex = 1.25, line = 1.5)
 dev.off()
