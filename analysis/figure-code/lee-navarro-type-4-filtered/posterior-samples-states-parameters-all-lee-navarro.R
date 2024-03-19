@@ -3,19 +3,49 @@
 source(file = "src/sampling-f/transform-data-chmm.R")
 source(file = "src/plot-f/plot-trial-trial.R")
 
+lee_long <- readr::read_csv(
+  file = "data/csv-files/lee-navarro-2002-type4-filtered.csv")
+
 lee_navarro <- transform_data_chmm(
   directory_data = "data/csv-files/lee-navarro-2002-type4-filtered.csv",
   directory_features = "data/stimulus-features/lee-navarro-features.csv")
 
-lee_long <- readr::read_csv(
-  file = "data/csv-files/lee-navarro-2002-type4-filtered.csv")
+lee_navarro$response <- lee_navarro$response[,,-c(which(unique(lee_long$id) == 6),
+                                                  which(unique(lee_long$id) == 22))]
+
+lee_navarro$participant_t <- lee_navarro$participant_t[-c(which(unique(lee_long$id) == 6),
+                                                          which(unique(lee_long$id) == 22))]
+
+rm_part <- c(which(unique(lee_long$id) == 6),
+             which(unique(lee_long$id) == 22))
+
+participants_id <- unique(lee_long$id)[-c(which(unique(lee_long$id) == 6),
+                                          which(unique(lee_long$id) == 22))]
+
+lee_long <- subset(x = lee_long, subset = id %in% participants_id)
 
 model_adequacy <- readRDS(
   file = "data/posterior-samples/posterior-adequacy/lee-navarro-type4-filtered-chmm.rds")
 
+model_adequacy <- model_adequacy[-rm_part,]
+
 samples <- readRDS(file = paste(c("data/posterior-samples/model-parameters/",
                                   "lee-navarro-type4-filtered-chmm.rds"),
                                 collapse = ""))
+
+samples$posterior_samples$gamma <- samples$posterior_samples$gamma[, -rm_part]
+samples$posterior_samples$epsilon <- samples$posterior_samples$epsilon[, -rm_part]
+samples$posterior_samples$alpha <- samples$posterior_samples$alpha[, -rm_part]
+samples$posterior_samples$beta <- samples$posterior_samples$beta[, -rm_part]
+samples$posterior_samples$hidden_states <- samples$posterior_samples$hidden_states[, ,-rm_part,]
+
+participant_labels <- LETTERS[seq(from = 1, to = length(unique(lee_long$id)))]
+participant_order <- lee_long |> 
+  dplyr::select(id, trial_condition) |> 
+  dplyr::group_by(id) |> 
+  dplyr::summarise("n_trials" = max(trial_condition)) |> 
+  dplyr::pull(n_trials) |> 
+  order(decreasing = FALSE)
 
 grDevices::cairo_pdf(
   file = "figures/lee-navarro-type-4-filtered/parameters-states-all-lee-navarro.pdf",
@@ -28,7 +58,7 @@ par(oma = c(3,3,10,2),
 
 participants <- unique(lee_long$id)
 
-for(pp in 1:length(samples$step_size)){
+for(pp in 1:dim(samples$posterior_samples$gamma)[2]){
   layout(rbind(c(1, 1, 1, 1),
                c(1, 1, 1, 1),
                c(1, 1, 1, 1),
@@ -51,7 +81,7 @@ for(pp in 1:length(samples$step_size)){
                           bar_width = 0.27, transparency_bars = FALSE, 
                           lwd_rect = 1.5)
   
-  mtext(text = paste("Participant: ", pp), 
+  mtext(text = paste("Participant: ", participant_labels[which(participant_order == pp)]), 
         side = 3, outer = TRUE, cex = 3, line = 6, at = 0.5)
   mtext(text = paste("Proportion of correct: ", prop_c), 
         side = 3, outer = TRUE, cex = 1.5, line = 2, at = 0.3)
@@ -65,22 +95,6 @@ for(pp in 1:length(samples$step_size)){
        labels = FALSE, tck = -0.01)
   axis(2, las = 2, at = seq(0.85, dim(lee_navarro$response)[1], 1),
        labels = FALSE, tck = -0.01)
-  
-  # positions <- seq(0.5, dim(lee_navarro$response)[1], 1)
-  # label_code <- rep(x = c("\U25CF ","\U25A0", "\U25B2"), each = 3)
-  # color_code <- c("black", NA, NA, NA, "black", NA, NA, NA, "black")
-  # size_code <- rep(x = c(2,1.4,2.2), each = 3)
-  # hadj_code <- c(0.22, NA, NA, NA, 0.199, NA, NA, NA, 0.37)
-  # padj_code <- c(0.44, NA, NA, NA, 0.51, NA, NA, NA, 0.42)
-  # for (i in 1:length(positions)) {
-  #   axis(2, at = positions[i],
-  #        labels = paste(label_code[i]),
-  #        las = 2, tck = 0, 
-  #        hadj = hadj_code[i], 
-  #        cex.axis = size_code[i], 
-  #        padj = padj_code[i], 
-  #        col.axis = paste(color_code[i]))
-  # }
   
   positions <- seq(0.5, dim(lee_navarro$response)[1], 1)
   label_code <- rep(x = c("\U25CF ","\U25A0", "\U25B2"), each = 3)

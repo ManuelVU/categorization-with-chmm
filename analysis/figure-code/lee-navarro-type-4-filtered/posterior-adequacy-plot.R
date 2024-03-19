@@ -18,7 +18,7 @@ source(file = "src/plot-f/plot-posterior-adequacy.R")
 lee <- readr::read_csv(
   file = "data/csv-files/lee-navarro-2002-type4-filtered.csv")
 
-# participants to remove from the analisis
+# participants to remove from the analysis
 participants_id <- unique(lee$id)[-c(which(unique(lee$id) == 6),
                                      which(unique(lee$id) == 22))]
 
@@ -59,9 +59,9 @@ part_color<- c("#d72631", "#77c593", "#1868ae")
 
 plot_posterior_adequacy(data = lee_filt,
                         samples_y = adequacy,
+                        category_color = c("#30626d", "#723f75"),
                         order = "decreasing",
-                        category_color = c("#ffc550", "#00b1ff"),
-                        # category_color = c("#d72631", "#1868ae"),
+                        fill_color = NA,
                         width = 0.67,
                         height = 0.6, 
                         increase = 5)
@@ -86,7 +86,7 @@ for (i in 1:dim(adequacy)[1]) {
                                         (1 - adequacy[i, 1:participant_t[i]])), 
                                  window_size = 5)
   
-  lines(x = logit_part_i, lwd = 1.5, col = "#80858877", type = "o", pch = 16,
+  lines(x = logit_part_i, lwd = 1.5, col = "#8595b555", type = "o", pch = 16,
         cex = 0.5)
   
 }

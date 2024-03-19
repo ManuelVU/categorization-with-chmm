@@ -27,7 +27,7 @@ correct_prop_trial <- function (data, participant, window_size,
 
 plot_correct_prop <- function (data_plot, window_size, line_color, line_lwd,
                                point_color, add_hist = TRUE, hist_color,
-                               sections, n_breaks = 5) {
+                               sections, n_breaks = 5, line_type = "o") {
   
   max_trials <- max(data_plot$trial_condition)
   if (add_hist == TRUE) {
@@ -56,7 +56,7 @@ plot_correct_prop <- function (data_plot, window_size, line_color, line_lwd,
                                         section = sections[j, ])
         
         lines(x = plot_data[, 2], y = plot_data[, 3], col = line_color, 
-              lwd = line_lwd)
+              lwd = line_lwd, type = line_type)
         
       }
     }
@@ -68,7 +68,7 @@ plot_correct_prop <- function (data_plot, window_size, line_color, line_lwd,
       pp[count] <- plot_data[length(plot_data[, 1]), 3]
       
       lines(x = plot_data[, 1], y = plot_data[, 3], col = line_color, 
-            lwd = line_lwd)
+            lwd = line_lwd, type = line_type)
     }
   }
   

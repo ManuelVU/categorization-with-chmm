@@ -20,7 +20,7 @@
 #       model's parameters for each participant, the names of the parameters 
 #       should be "alpha", "beta", "gamma", "epsilon". The initial values of the 
 #       hidden states are generated internally by the function.
-#   8:  start_setp_size, starting value for the step size used by the HMC 
+#   8:  start_step_size, starting value for the step size used by the HMC 
 #       algorithm,
 #   9:  hmc_acceptance, target acceptance probability for the HMC algorithm.
 #   10: prior_parameters, values of the parameters of the prior distributions 
@@ -183,7 +183,7 @@ chmm_sampling <- function(data_chmm, metric = "distinctive", order_p = 1,
       epsilon_prior = c(prior_parameters$epsilon[1],
                         prior_parameters$epsilon[2]))
     
-    # Update step size during burn in for Hamiltonian
+# Update step size during burn in for Hamiltonian
     if ((sample %% 100) == 0 & (sample <= n_burn)) {
       step_size <- adjust_step(step_size = step_size, 
                                acceptance_prob = 

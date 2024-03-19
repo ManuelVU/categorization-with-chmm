@@ -56,6 +56,9 @@ participant_order <- lee_filt |>
 pdf(file = "figures/lee-navarro-type-4-filtered/posterior-stickiness.pdf", 
     width = 3, height = 3)
 
+part_color<- c("#d72631", "#77c593", "#1868ae")
+part_color_id <- c("A", "D", "H")
+
 par(oma = c(2,2,0.2,0.2),
     mai = c(0,0,0,0))
 
@@ -109,15 +112,19 @@ for (i in 1:dim(beta_0)[2]) {
          angle = 90, length = 0.02, col = col_ci)
 }
 
-points(x = mu_x, y = mu_y, pch = 21, bg = "#F5DF4D",
-       cex = 1.2)
+points(x = mu_x[participant_order], y = mu_y[participant_order], pch = 21, 
+       bg = c(part_color[1], rep(x = "#F5DF4D", 2),
+              part_color[2], rep(x = "#F5DF4D", 3),
+              part_color[3], rep(x = "#F5DF4D", 4)),
+       col = "black",
+       cex = 1.15)
 
 text(x = mu_x[participant_order], y = mu_y[participant_order],
-     labels = participant_labels, cex = 0.5)
+     labels = participant_labels, cex = 0.45)
 
 axis(1, padj = -1.8, cex.axis = 0.8, tck = -0.02)
 axis(2, las = 2, hadj = -0.5, cex.axis = 0.8, tck = -0.02)
-mtext(text = "Low base-rate category", side = 1, line = 1)
-mtext(text = "High base-rate category", side = 2, line = 1)
+mtext(text = "Low base-rate category", side = 1, line = 1, cex = 0.8)
+mtext(text = "High base-rate category", side = 2, line = 1, cex = 0.8)
 
 dev.off()
