@@ -31,15 +31,21 @@ plot_posterior_adequacy <- function (data, samples_y, order = "decreasing",
        xlim = c(0, max(trials[, 3]) + increase))
   
   for (p in 1:length(participants)) {
+    tmp <- subset(x = data, subset = id == trials[p, 1])
+    
     for (t in 1:trials[p, 3]) {
+      boder_color <- category_color[tmp$response[t] + 1]
+      
+      agreement <- round(samples_y[trials[p, 2], t]) == tmp$response[t]
+      
+      filling_color <- filling[agreement + 1, tmp$response[t] + 1]
+      
       rect(xleft = t - width / 2, 
            xright = t + width / 2, 
            ybottom = length(participants) + 1 - p - height / 2,
            ytop = length(participants) + 1 - p + height / 2,
-           border = 
-             category_color[(data$response[data$id == trials[p, 1]])[t] + 1],
-           col = filling[round(samples_y[trials[p, 2], t]) + 1, 
-                         (data$response[data$id == trials[p, 1]])[t] + 1])      
+           border = boder_color,
+           col = filling_color)      
     }
   }
 }
