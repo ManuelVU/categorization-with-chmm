@@ -1,5 +1,5 @@
 # load all similarity functions from similarity-f path
-prefix <- paste(c(here::here(),"/src/sampling-f/"), collapse = "")
+prefix <- paste(c(here::here(),"/src/sampling-f/interaction/"), collapse = "")
 
 files_sources <- list.files(path = prefix)
 

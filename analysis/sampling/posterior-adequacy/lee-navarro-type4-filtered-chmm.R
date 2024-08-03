@@ -1,5 +1,9 @@
 # Posterior adequacy figure for CHMM approach in Lee and Navarro 2002
 
+rm(list = ls())
+
+gc()
+
 # Load type 4 category structure data from L&N 2002
 lee_navarro <- readr::read_csv(
   file = "data/csv-files/lee-navarro-2002-type4-filtered.csv")
@@ -11,7 +15,7 @@ samples <- readRDS(
                collapse = ""))
 
 # Load posterior adequacy sampler function
-source(file = "src/sampling-f/posterior-adequacy-sampler.R")
+source(file = "src/sampling-f/interaction/posterior-adequacy-sampler.R")
 
 # Use all samples to calculate the mode response for each participant and trial
 participants_keep <- unique(lee_navarro$id)
