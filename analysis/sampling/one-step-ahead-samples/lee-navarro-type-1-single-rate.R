@@ -1,7 +1,7 @@
 ################################################################################
 ## The code in this section obtains the posterior one-step-ahead agreement    ##
 ## between participant's responses and model posterior samples for a CHMM.    ##
-## with a single rate and stimulus interaction for type 1 condition           ##
+## with a single rate for type 1 condition                                    ##
 ################################################################################
 
 # remove data from environment including hidden objects
@@ -24,7 +24,7 @@ type_1 <- readr::read_csv(
 # load posterior samples
 samples_t1 <- readRDS(
   file = paste(x = c("data/posterior-samples/model-parameters/",
-                     "lee-navarro-type1-filtered-chmm-stick-weight.rds"),
+                     "lee-navarro-type1-filtered-chmm-stick.rds"),
                collapse = ""))
 
 # calculate distinctiveness of stimuli in the task
@@ -44,10 +44,12 @@ posterior_one_step <- one_step_ahead(data = type_1,
                                      max_trials = max(type_1$trial),
                                      samples = samples_t1,
                                      n_samples = 4000,
-                                     similarity = stimulus_similarity)
+                                     similarity = stimulus_similarity,
+                                     interaction = FALSE)
 
 # save posterior samples
 saveRDS(object = posterior_one_step,
         file = paste(c("data/posterior-samples/posterior-adequacy/",
-                       "one-step-ahead-type1-chmm-stick-interaction.rds"),
+                       "one-step-ahead-type1-chmm-stick.rds"),
                      collapse = ""))
+

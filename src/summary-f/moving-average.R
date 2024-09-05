@@ -7,10 +7,10 @@ moving_average <- function(data, window_size){
   ma <- c()
   for(i in 1:t){
     if(i < window_size){
-      ma[i] <- mean(data[1:i]) 
+      ma[i] <- mean(data[1:i], na.rm = TRUE) 
     }
     else{
-      ma[i] <- mean(data[(i - window_size + 1):i])
+      ma[i] <- mean(data[(i - window_size + 1):i], na.rm = TRUE)
     }
   }
   return(ma)
