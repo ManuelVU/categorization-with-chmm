@@ -15,10 +15,10 @@ lee_navarro <- transform_data_chmm(
   directory_features = "data/stimulus-features/lee-navarro-features.csv")
 
 # set number of iterations
-iterations <- 20000
+iterations <- 25000
 
 # set number of burn in samples
-burn <- 12000
+burn <- 17000
 
 # set acceptance rate target for HMC
 acceptance_target <- 0.8
